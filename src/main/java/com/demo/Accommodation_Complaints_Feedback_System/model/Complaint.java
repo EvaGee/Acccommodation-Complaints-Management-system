@@ -28,7 +28,7 @@ public class Complaint {
 	private String complaint_content;
 	
 	@NotBlank
-	private String complaint_status = "pending";
+	private String complaintStatus = "pending";
 	
 	private int complaint_approved_or_rejected_by = 0;
 	
@@ -101,11 +101,11 @@ public class Complaint {
 	}
 
 	public String getComplaint_status() {
-		return complaint_status;
+		return complaintStatus;
 	}
 
 	public void setComplaint_status(String complaint_status) {
-		this.complaint_status = complaint_status;
+		this.complaintStatus = complaint_status;
 	}
 
 	public int getComplaint_author_id() {
@@ -119,7 +119,7 @@ public class Complaint {
 	@Override
 	public String toString() {
 		return "Complaint [complaint_id=" + complaint_id + ", complaint_category=" + complaint_category
-				+ ", complaint_content=" + complaint_content + ", complaint_status=" + complaint_status
+				+ ", complaint_content=" + complaint_content + ", complaint_status=" + complaintStatus
 				+ ", complaint_approved_or_rejected_by=" + complaint_approved_or_rejected_by + ", complaint_author_id="
 				+ complaint_author_id + ", complaint_assigned_to=" + complaint_assigned_to + ", complaint_assigned_by="
 				+ complaint_assigned_by + ", complaint_done_by=" + complaint_done_by + "]";

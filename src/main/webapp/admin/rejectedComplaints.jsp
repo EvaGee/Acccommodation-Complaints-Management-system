@@ -231,6 +231,10 @@
 			%>
                 </tbody>
                 </table>
+                <form action="/admin/RejectedComplaintsReport" method="post">
+     <input type="hidden" name="complaintStatus" value="rejected">
+                <button type="submit" class="btn btn-success btn-block">Print</button>
+     			</form>
      
             </div>
     </section>

@@ -236,7 +236,7 @@
 			%>
                 </tbody>
                 </table>
-                 <a href="/admin/getReport">
+                 <a href="/admin/AllComplaintsReport">
                 <button type="submit" class="btn btn-success btn-block">Print</button>
      			</a>
             </div>

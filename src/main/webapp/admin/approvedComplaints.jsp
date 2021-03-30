@@ -231,7 +231,10 @@
 			%>
                 </tbody>
                 </table>
-     
+     <form action="/admin/ApprovedComplaintsReport" method="post">
+     <input type="hidden" name="complaintStatus" value="approved">
+                <button type="submit" class="btn btn-success btn-block">Print</button>
+     			</form>
             </div>
     </section>
           

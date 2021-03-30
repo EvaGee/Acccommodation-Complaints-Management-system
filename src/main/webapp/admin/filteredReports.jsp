@@ -158,7 +158,7 @@
             <div class="container">
 
       <!-- About Section Heading -->
-      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Pending Complaints</h2>
+      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Get Reports</h2>
 
       <!-- Icon Divider -->
       <div class="divider-custom ">
@@ -168,72 +168,54 @@
         </div>
         <div class="divider-custom-line"></div>
       </div>
-     <%@page import="java.sql.DriverManager"%>
-			<%@page import="java.sql.ResultSet"%>
-			<%@page import="java.sql.Statement"%>
-			<%@page import="java.sql.Connection"%>
-
-			<%
-
-			String driverName = "com.mysql.cj.jdbc.Driver";
-			String connectionUrl = "jdbc:mysql://localhost:3306/accommodation_complaints_feedback_system";
-			String userId = "root";
-			String password = "";
-
-			try {
-			Class.forName(driverName);
-			}catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			}
-
-			Connection connection = null;
-			Statement statement = null;
-			ResultSet resultSet = null;
-			%>
-
-      <table class="table table-secondary container">
-                <thead>
-                 <tr>
-                    
-                   <td>Complaint ID</td>
-				<td>Complaint Category</td>
-				<td>Complaint Content</td>
-				<td>Complaint Author: (ID)</td>
-				
-                  </tr>
-                  
-                </thead>
-                <tbody>
-                <%
-                try{
-                	connection = DriverManager.getConnection(connectionUrl, userId, password);
-        			statement=connection.createStatement();
-        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'pending' ORDER BY complaint_id DESC";
-
-        			resultSet = statement.executeQuery(sql);
-        			while(resultSet.next()){
-        			%>
-        			<tr>
-        				<td><%out.println(resultSet.getString("complaint_id")); %></td>
-        				<td><%out.println(resultSet.getString("complaint_category")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_author_id")); %></td>
-        		    	
-        			</tr>
- 
-    				<%
-    			    }
-
-    			    } catch (Exception e) {
-    			    e.printStackTrace();
-    			    }
-			%>
-                </tbody>
-                </table>
-     <form action="/admin/PendingComplaintsReport" method="post">
-     <input type="hidden" name="complaintStatus" value="pending">
-                <button type="submit" class="btn btn-success btn-block">Print</button>
-     			</form>
+     <form action="/admin/complaintsReportByDate" method="post">
+      <div class="row">
+        <div class="col-lg-4 ml-auto">
+          <p class="lead">Complaint status</p>
+        </div>
+        <div class="col-lg-4 mr-auto">
+          <div class="form-group">
+             <select type="date" class="form-control" name="complaintStatus" required >
+             			<option value="all">All</option>
+             			<option value="pending">Pending</option>
+			            <option value="approved">Approved</option>
+			            <option value="rejected">Rejected</option>
+			            <option value="assigned">Assigned</option>
+			            <option value="done">Done</option>
+			</select>
+           </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 ml-auto">
+          <p class="lead">Start Date</p>
+        </div>
+        <div class="col-lg-4 mr-auto">
+          <div class="form-group">
+                    <input type="date" class="form-control" name="dateStart" required >
+           </div>
+        </div>
+      </div>
+       <div class="row">
+        <div class="col-lg-4 ml-auto">
+          <p class="lead">End Date</p>
+        </div>
+        <div class="col-lg-4 mr-auto">
+          <div class="form-group">
+                    <input type="date" class="form-control" name="dateEnd" required>
+                </div>
+        </div>
+      </div>
+      <div class="row">
+      <div class="col-lg-4 ml-auto">
+          <p class="lead"></p>
+        </div>
+        <div class="col-lg-4 mr-auto">
+        <p class="lead"><button type="submit" class="btn btn-success btn-block">Generate Report</button></p>
+        </div>
+      </div>
+      
+      </form>
             </div>
     </section>
           

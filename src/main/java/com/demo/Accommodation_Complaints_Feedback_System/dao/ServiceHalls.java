@@ -2,6 +2,8 @@ package com.demo.Accommodation_Complaints_Feedback_System.dao;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,5 +95,52 @@ public class ServiceHalls {
 
     	return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 	}
+	
+	public JasperPrint testReport(String complaintStatus,Date startDate, Date endDate) throws JRException, IOException {
+		List<Complaint> complaints = complaint_repository.findByComplaintStatusAndCreatedAtBetween(complaintStatus, startDate, endDate);
+
+		// load file and compile it
+		File file = ResourceUtils.getFile("classpath:complaints.jrxml");
+
+		JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+
+		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(complaints);
+
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("createdBy", "Admin");
+
+    	return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+	} 
+	public JasperPrint testReport(Date startDate, Date endDate) throws JRException, IOException {
+		List<Complaint> complaints = complaint_repository.findByCreatedAtBetween(startDate, endDate);
+
+		// load file and compile it
+		File file = ResourceUtils.getFile("classpath:complaints.jrxml");
+
+		JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+
+		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(complaints);
+
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("createdBy", "Admin");
+
+    	return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+	} 
+	public JasperPrint testReport(String complaintStatus) throws JRException, IOException {
+		List<Complaint> complaints = complaint_repository.findAllByComplaintStatus(complaintStatus);
+
+		// load file and compile it
+		File file = ResourceUtils.getFile("classpath:complaints.jrxml");
+
+		JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+
+		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(complaints);
+
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("createdBy", "Admin");
+
+    	return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+	} 
+	
 	
 }

@@ -2,7 +2,10 @@ package com.demo.Accommodation_Complaints_Feedback_System.controller;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -1244,7 +1247,7 @@ public class HallsController {
 		return "redirect:/admin/reports.jsp";
 	
 	}
-	@GetMapping("/admin/getReport")
+	@GetMapping("/admin/AllComplaintsReport")
 	public String generateCert( HttpServletResponse response) throws JRException, IOException {
     	JasperPrint jasper=null;
     	
@@ -1268,5 +1271,171 @@ public class HallsController {
     	 
     	 return "admin/adminUI.jsp";
     }
+	@RequestMapping("/admin/complaintsReportByDate")
+	public String generateCert(@RequestParam String complaintStatus,@RequestParam String dateStart, String dateEnd, HttpServletResponse response) throws JRException, IOException {
+		SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate=null;
+        Date endDate=null;
+        try {
+        	startDate = sdformat.parse(dateStart);
+        	endDate = sdformat.parse(dateEnd);
+                
+                } 
+        catch (ParseException ex) {
+                    System.out.println("error parsing it bro");
+                   
+                }
+		JasperPrint jasper=null;
+		if(complaintStatus.equals("all")) {jasper= service.testReport(startDate, endDate);}
+    	
+		else {
+    	 jasper= service.testReport(complaintStatus,startDate, endDate);
+		}
+    	 byte[] pdf = null;
+    	 
+    	 String filename = complaintStatus+startDate+endDate+" complaints.pdf";
+    	 
+    	 pdf = JasperExportManager.exportReportToPdf(jasper);
+    	 
+         response.setContentType("application/pdf");
+         
+         response.setContentLength(pdf.length);
+    	 
+         response.addHeader("Content-disposition", "inline; filename=\"" + filename + "\"");
+         
+         OutputStream out = response.getOutputStream();
+         
+         JasperExportManager.exportReportToPdfStream(jasper, out);
+    	 
+    	 return "admin/adminUI.jsp";
+    }
+	@RequestMapping("/admin/ApprovedComplaintsReport")
+	public String generateApprovedComplaintsReport(@RequestParam String complaintStatus, HttpServletResponse response) throws JRException, IOException {
+		
+		JasperPrint jasper=null;
+    	
+    	 jasper= service.testReport(complaintStatus);
+    	 
+    	 byte[] pdf = null;
+    	 
+    	 String filename =complaintStatus+ " complaints.pdf";
+    	 
+    	 pdf = JasperExportManager.exportReportToPdf(jasper);
+    	 
+         response.setContentType("application/pdf");
+         
+         response.setContentLength(pdf.length);
+    	 
+         response.addHeader("Content-disposition", "inline; filename=\"" + filename + "\"");
+         
+         OutputStream out = response.getOutputStream();
+         
+         JasperExportManager.exportReportToPdfStream(jasper, out);
+    	 
+    	 return "admin/adminUI.jsp";
+    }
+	@RequestMapping("/admin/PendingComplaintsReport")
+	public String generatePendingComplaintsReport(@RequestParam String complaintStatus, HttpServletResponse response) throws JRException, IOException {
+		
+		JasperPrint jasper=null;
+    	
+    	 jasper= service.testReport(complaintStatus);
+    	 
+    	 byte[] pdf = null;
+    	 
+    	 String filename =complaintStatus+ " complaints.pdf";
+    	 
+    	 pdf = JasperExportManager.exportReportToPdf(jasper);
+    	 
+         response.setContentType("application/pdf");
+         
+         response.setContentLength(pdf.length);
+    	 
+         response.addHeader("Content-disposition", "inline; filename=\"" + filename + "\"");
+         
+         OutputStream out = response.getOutputStream();
+         
+         JasperExportManager.exportReportToPdfStream(jasper, out);
+    	 
+    	 return "admin/adminUI.jsp";
+    }
+	@RequestMapping("/admin/RejectedComplaintsReport")
+	public String generateRejectedComplaintsReport(@RequestParam String complaintStatus, HttpServletResponse response) throws JRException, IOException {
+		
+		JasperPrint jasper=null;
+    	
+    	 jasper= service.testReport(complaintStatus);
+    	 
+    	 byte[] pdf = null;
+    	 
+    	 String filename =complaintStatus+ " complaints.pdf";
+    	 
+    	 pdf = JasperExportManager.exportReportToPdf(jasper);
+    	 
+         response.setContentType("application/pdf");
+         
+         response.setContentLength(pdf.length);
+    	 
+         response.addHeader("Content-disposition", "inline; filename=\"" + filename + "\"");
+         
+         OutputStream out = response.getOutputStream();
+         
+         JasperExportManager.exportReportToPdfStream(jasper, out);
+    	 
+    	 return "admin/adminUI.jsp";
+    }
+	@RequestMapping("/admin/AssignedComplaintsReport")
+	public String generateAssignedComplaintsReport(@RequestParam String complaintStatus, HttpServletResponse response) throws JRException, IOException {
+		
+		JasperPrint jasper=null;
+    	
+    	 jasper= service.testReport(complaintStatus);
+    	 
+    	 byte[] pdf = null;
+    	 
+    	 String filename =complaintStatus+ " complaints.pdf";
+    	 
+    	 pdf = JasperExportManager.exportReportToPdf(jasper);
+    	 
+         response.setContentType("application/pdf");
+         
+         response.setContentLength(pdf.length);
+    	 
+         response.addHeader("Content-disposition", "inline; filename=\"" + filename + "\"");
+         
+         OutputStream out = response.getOutputStream();
+         
+         JasperExportManager.exportReportToPdfStream(jasper, out);
+    	 
+    	 return "admin/adminUI.jsp";
+    }
+
+	@RequestMapping("/admin/DoneComplaintsReport")
+	public String generateDoneComplaintsReport(@RequestParam String complaintStatus, HttpServletResponse response) throws JRException, IOException {
+		
+		JasperPrint jasper=null;
+    	
+    	 jasper= service.testReport(complaintStatus);
+    	 
+    	 byte[] pdf = null;
+    	 
+    	 String filename =complaintStatus+ " complaints.pdf";
+    	 
+    	 pdf = JasperExportManager.exportReportToPdf(jasper);
+    	 
+         response.setContentType("application/pdf");
+         
+         response.setContentLength(pdf.length);
+    	 
+         response.addHeader("Content-disposition", "inline; filename=\"" + filename + "\"");
+         
+         OutputStream out = response.getOutputStream();
+         
+         JasperExportManager.exportReportToPdfStream(jasper, out);
+    	 
+    	 return "admin/adminUI.jsp";
+    }
+
+
 
 }
