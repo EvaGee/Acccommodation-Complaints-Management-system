@@ -27,7 +27,7 @@
                             <img src='images/egerlogo.jpg' alt='logo' width="200%" height="100%">
                         </span>
                         <span class="login100-form-title p-b-34 p-t-27">
-                            Accommodation Complaints System 
+                            Accommodation Complaints Management System 
 						</span>
 
 					<div class="login100-form">

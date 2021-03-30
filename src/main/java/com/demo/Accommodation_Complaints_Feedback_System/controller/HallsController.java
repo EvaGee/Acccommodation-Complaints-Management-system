@@ -1,14 +1,18 @@
 package com.demo.Accommodation_Complaints_Feedback_System.controller;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +21,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.demo.Accommodation_Complaints_Feedback_System.dao.ServiceHalls;
 import com.demo.Accommodation_Complaints_Feedback_System.model.User;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
+
 import com.demo.Accommodation_Complaints_Feedback_System.model.Complaint;
 import com.demo.Accommodation_Complaints_Feedback_System.model.Report;
 
@@ -33,7 +42,7 @@ public class HallsController {
 	
 	//register new user
 	@PostMapping("/register_user")
-	public String addUser(@RequestParam String user_number, @RequestParam String user_firstname, @RequestParam String user_lastname, @RequestParam String username, @RequestParam String user_email, @RequestParam String user_role, @RequestParam String user_hostel, @RequestParam String user_block, @RequestParam String user_room_number, @RequestParam String password) {
+	public String addUser(@RequestParam String user_number, @RequestParam String user_firstname, @RequestParam String user_lastname, @RequestParam String username, @RequestParam String user_email, @RequestParam String user_role, @RequestParam String user_hostel, @RequestParam String user_block, @RequestParam String user_room_number) {
 		User user = new User();
 		if(user_hostel == "" && user_block == "" && user_room_number == "") {
 			user.setUser_number(user_number);
@@ -45,7 +54,7 @@ public class HallsController {
 			user.setUser_hostel("");
 			user.setUser_block("");
 			user.setUser_room_number(0);
-			user.setPassword(password);
+			user.setPassword(user_number);
 			
 			service.saveUser(user);
 			
@@ -59,7 +68,7 @@ public class HallsController {
 			user.setUser_hostel(user_hostel);
 			user.setUser_block(user_block);
 			user.setUser_room_number(0);
-			user.setPassword(password);
+			user.setPassword(user_number);
 			
 			service.saveUser(user);
 		} else {
@@ -72,7 +81,7 @@ public class HallsController {
 			user.setUser_hostel(user_hostel);
 			user.setUser_block(user_block);
 			user.setUser_room_number(Integer.parseInt(user_room_number));
-			user.setPassword(password);
+			user.setPassword(user_number);
 			
 			service.saveUser(user);
 		}
@@ -136,9 +145,11 @@ public class HallsController {
 					request.getSession().setAttribute("USER_LASTNAME", user_lastname.toString().replace("[", "").replace("]", ""));
 					request.getSession().setAttribute("USER_NUMBER", user_number.toString().replace("[", "").replace("]", ""));
 					request.getSession().setAttribute("USER_EMAIL", user_email.toString().replace("[", "").replace("]", ""));
-					
+					if (password.equals(admin.getUser_number())) {
+						return "redirect:/admin/profile.jsp";
+					} else {	
 					return "redirect:/admin/adminUI.jsp";
-					
+					}
 				} else {
 					return "redirect:/login.jsp";
 				}
@@ -204,9 +215,11 @@ public class HallsController {
 						request.getSession().setAttribute("USER_HOSTEL", user_hostel.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_BLOCK", user_block.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_ROOM_NUMBER", user_room_number.toString().replace("[", "").replace("]", ""));
-						
+						if (password.equals(student.getUser_number())) {
+							return "redirect:/profile.jsp";
+						} else {
 						return "redirect:/studentUI.jsp";
-						
+						}		
 					} else {
 						return "redirect:/login.jsp";
 					}
@@ -255,9 +268,11 @@ public class HallsController {
 						request.getSession().setAttribute("USER_NUMBER", user_number.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_EMAIL", user_email.toString().replace("[", "").replace("]", ""));
 						
-						
+						if (password.equals(halls_officer.getUser_number())) {
+							return "redirect:/profile.jsp";
+						} else {
 						return "redirect:/hallsOfficerUI.jsp";
-						
+						}	
 					} else {
 						return "redirect:/login.jsp";
 					}
@@ -315,9 +330,11 @@ public class HallsController {
 						request.getSession().setAttribute("USER_EMAIL", user_email.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_HOSTEL", user_hostel.toString().replace("[", "").replace("]", ""));
 						
-						
+						if (password.equals(custodian.getUser_number())) {
+							return "redirect:/profile.jsp";
+						} else {
 						return "redirect:/custodianUI.jsp";
-						
+						}	
 					} else {
 						return "redirect:/login.jsp";
 					}	
@@ -366,9 +383,11 @@ public class HallsController {
 						request.getSession().setAttribute("USER_LASTNAME", user_lastname.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_NUMBER", user_number.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_EMAIL", user_email.toString().replace("[", "").replace("]", ""));
-						
+						if (password.equals(plumber.getUser_number())) {
+							return "redirect:/profile.jsp";
+						} else {
 						return "redirect:/plumberUI.jsp";
-						
+						}	
 					} else {
 						return "redirect:/login.jsp";
 					}	
@@ -416,8 +435,11 @@ public class HallsController {
 						request.getSession().setAttribute("USER_LASTNAME", user_lastname.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_NUMBER", user_number.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_EMAIL", user_email.toString().replace("[", "").replace("]", ""));
+						if (password.equals(mason.getUser_number())) {
+							return "redirect:/profile.jsp";
+						} else {
 						return "redirect:/masonUI.jsp";
-						
+						}	
 					} else {
 						return "redirect:/login.jsp";
 					}
@@ -465,9 +487,11 @@ public class HallsController {
 						request.getSession().setAttribute("USER_LASTNAME", user_lastname.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_NUMBER", user_number.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_EMAIL", user_email.toString().replace("[", "").replace("]", ""));
-						
+						if (password.equals(carpenter.getUser_number())) {
+							return "redirect:/profile.jsp";
+						} else {
 						return "redirect:/carpenterUI.jsp";
-						
+						}
 					} else {
 						return "redirect:/login.jsp";
 					}
@@ -515,8 +539,11 @@ public class HallsController {
 						request.getSession().setAttribute("USER_LASTNAME", user_lastname.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_NUMBER", user_number.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_EMAIL", user_email.toString().replace("[", "").replace("]", ""));
+						if (password.equals(security.getUser_number())) {
+							return "redirect:/profile.jsp";
+						} else {
 						return "redirect:/securityUI.jsp";
-						
+						}
 					} else {
 						return "redirect:/login.jsp";
 					}
@@ -564,9 +591,11 @@ public class HallsController {
 						request.getSession().setAttribute("USER_LASTNAME", user_lastname.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_NUMBER", user_number.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_EMAIL", user_email.toString().replace("[", "").replace("]", ""));
-						
+						if (password.equals(electrician.getUser_number())) {
+							return "redirect:/profile.jsp";
+						} else {
 						return "redirect:/electricianUI.jsp";
-						
+						}
 					} else {
 						return "redirect:/login.jsp";
 					}
@@ -614,9 +643,11 @@ public class HallsController {
 						request.getSession().setAttribute("USER_LASTNAME", user_lastname.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_NUMBER", user_number.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_EMAIL", user_email.toString().replace("[", "").replace("]", ""));
-						
+						if (password.equals(cleaner.getUser_number())) {
+							return "redirect:/profile.jsp";
+						} else {
 						return "redirect:/cleanerUI.jsp";
-						
+						}
 					} else {
 						return "redirect:/login.jsp";
 					}
@@ -664,9 +695,11 @@ public class HallsController {
 						request.getSession().setAttribute("USER_LASTNAME", user_lastname.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_NUMBER", user_number.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_EMAIL", user_email.toString().replace("[", "").replace("]", ""));
-						
+						if (password.equals(health.getUser_number())) {
+							return "redirect:/profile.jsp";
+						} else {
 						return "redirect:/healthUI.jsp";
-						
+						}
 					} else {
 						return "redirect:/login.jsp";
 					}
@@ -714,8 +747,11 @@ public class HallsController {
 						request.getSession().setAttribute("USER_LASTNAME", user_lastname.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_NUMBER", user_number.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_EMAIL", user_email.toString().replace("[", "").replace("]", ""));
+						if (password.equals(painter.getUser_number())) {
+							return "redirect:/profile.jsp";
+						} else {
 						return "redirect:/painterUI.jsp";
-						
+						}
 					} else {
 						return "redirect:/login.jsp";
 					}
@@ -724,7 +760,40 @@ public class HallsController {
 			    return "redirect:/login.jsp";  
 		 }
 	}
-	
+	@PostMapping("/update_user")
+	public String updateUser(@RequestParam String user_role, @RequestParam String username,
+			@RequestParam String user_email, @RequestParam String user_hostel, @RequestParam String user_block,
+			@RequestParam String user_room_number, @RequestParam String password, @RequestParam int user_id) {
+		
+		User user = service.getUser(user_id);
+
+		if (user_role.equals("student")) {
+			user.setUsername(username);
+			user.setUser_email(user_email);
+			user.setUser_hostel(user_hostel);
+			user.setUser_block(user_block);
+			user.setUser_room_number(Integer.parseInt(user_room_number));
+			user.setPassword(password);
+
+			service.saveUser(user);
+		} else if (user_role.equals("custodian")) {
+			user.setUsername(username);
+			user.setUser_email(user_email);
+			user.setUser_hostel(user_hostel);
+			user.setUser_block(user_block);
+			user.setPassword(password);
+
+			service.saveUser(user);
+		} else {
+			user.setUsername(username);
+			user.setUser_email(user_email);
+			user.setPassword(password);
+
+			service.saveUser(user);
+		}
+
+		return "redirect:/logout";
+	}
 	
 	//kill session
 	@RequestMapping("/logout")
@@ -1175,5 +1244,29 @@ public class HallsController {
 		return "redirect:/admin/reports.jsp";
 	
 	}
+	@GetMapping("/admin/getReport")
+	public String generateCert( HttpServletResponse response) throws JRException, IOException {
+    	JasperPrint jasper=null;
+    	
+    	 jasper= service.getReport();
+    	 
+    	 byte[] pdf = null;
+    	 
+    	 String filename = " complaints.pdf";
+    	 
+    	 pdf = JasperExportManager.exportReportToPdf(jasper);
+    	 
+         response.setContentType("application/pdf");
+         
+         response.setContentLength(pdf.length);
+    	 
+         response.addHeader("Content-disposition", "inline; filename=\"" + filename + "\"");
+         
+         OutputStream out = response.getOutputStream();
+         
+         JasperExportManager.exportReportToPdfStream(jasper, out);
+    	 
+    	 return "admin/adminUI.jsp";
+    }
 
 }

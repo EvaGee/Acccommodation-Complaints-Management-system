@@ -1,210 +1,93 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%-- 
+    Document   : newlogin
+    Created on : Mar 2, 2020, 6:59:08 PM
+    Author     : Eva
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js" integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js" integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG" crossorigin="anonymous"></script>
-</head>
-<body>
-<div class="container-fluid bg">
-		<div class="container">
-			<!-- Form Start -->
-            <form class="form-container" method="post" action="/register_user" name="user_registration_form" id="user_registration_form" onsubmit="return validateForm()">
-                <h1>User Registration Form</h1>
-                <div class="form-group">
-                	<label for="user_role">User Role:</label><br>
-                    <select onchange = "displayFunction()" name="user_role" id="user_role">
-			            <!-- Default -->
-			            <option value="student">Select Options</option>
-			            
-			            <option value="student">Student</option>
-			            <option value="admin">Admin</option>
-			            <option value="halls_officer">Halls Officer</option>
-			            <option value="custodian">Custodian</option>
-			            <option value="carpenter">Carpenter</option>
-			            <option value="electrician">Electrician</option>
-			            <option value="plumber">Plumber</option>
-			            <option value="mason">Mason</option>
-			            <option value="security">Security</option>
-			            <option value="cleaner">Cleaner</option>
-			            <option value="health">Health</option>
-			            <option value="painter">Painter</option>
-		        	</select>
-                </div>
-                <div class="form-group">
-                    <label for="user_number">Registration Number:</label>
-                    <input type="text" style="visibility: hidden" class="form-control" id="reg_no" name="user_number" placeholder="Registration Number" pattern="[A-Z][0-9]+/[0-9]+\/[0-9]{2}$" title="Use this format A12/1234567/17">
-                </div>
-                <div class="form-group">
-                    <label for="user_number">Staff Number:</label>
-                    <input type="text" style="visibility: hidden" class="form-control" id="staff_no" name="user_number" placeholder="Staff Number" pattern="[A-Z]+[A-Z]+[0-9]{5,5}" title="2 or 3 capital letters followed by 5 numbers" minlength="7" maxlength="8">
-                </div>
-                <div class="form-group">
-                    <label for="user_firstname">Firstname:</label>
-                    <input type="text" class="form-control" id="user_firstname" name="user_firstname" placeholder="Firstname" pattern="[A-Za-z']+" title="alphabets and ' only" required>
-                </div>
-                <div class="form-group">
-                    <label for="user_lastname">Lastname:</label>
-                    <input type="text" class="form-control" id="user_lastname" name="user_lastname" placeholder="Lastname" pattern="[A-Za-z']+" title="alphabets and ' only" required>
-                </div>
-                <div class="form-group">
-                
-                    <label for="uname">Username:</label>
-                    <input type="text" class="form-control" id="username" name="username" placeholder="Username" minlength="5" required>
-                </div>
-                <div class="form-group">
-                    <label for="user_email">Email:</label>
-                    <input type="email" class="form-control" id="user_email" name="user_email" placeholder="Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" title="Use the correct format -----@-----.---" required>
-                </div>
-                <div class="form-group">
-                    <label for="user_hostel">Hostel:</label>
-                    <input type="text" style="visibility: hidden" class="form-control" id="user_hostel" name="user_hostel" placeholder="Hostel">
-                </div>
-                <div class="form-group">
-                    <label for="user_block">Block:</label>
-                    <input type="text" style="visibility: hidden" class="form-control" id="user_block" name="user_block" placeholder="Block">
-                </div>
-                <div class="form-group">
-                    <label for="user_room_number">Room Number:</label>
-                    <input type="number" style="visibility: hidden" class="form-control" id="user_room_number" name="user_room_number" placeholder="Room Number">
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" minlength="6">
-                </div>
-                <div class="form-group">
-                    <label for="confirmPassword">Confirm Password</label>
-                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" onkeyup='check();'> <span id='message'></span>
-                </div>
-                  <button type="submit" class="btn btn-success btn-block">Submit</button>
-                <br>
-                <button type="button" class="btn btn-danger btn-block" onClick="window.location.href='/admin/adminUI.jsp'">Cancel</button>
-            </form>
-				<!-- Form End-->
-            <script>
+<html lang="en">
+    <head>
+	<title>Egerton University</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">	
+	<link rel="icon" type="image/jpg" href="images/egerlogo.jpg"/>
+	
+	<link rel="stylesheet" type="text/css" href="css/util.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+    </head>
+
+    <body >
+
+	<div class="limiter">
+            <div class="container-login100" style="background-image: url('images/gate1.jpg');">
+		<div class="wrap-login100">
+                    <form class="login100-form validate-form" method="post" action="/register_user" name="login_form" id="login_form">
+                        
+                        <span class="login100-form-title p-b-34 p-t-27">
+                            Register other users 
+						</span>
+
+					<div class="login100-form">
+                            <label for="category">User role:</label>
+                            <select class="input100" id="user_role" name="user_role">
+                            <option value="admin">Admin</option>
+	                        <option value="halls_officer">Halls Officer</option>
+	                        <option value="mason">Mason</option>
+	                        <option value="carpenter">Carpenter</option>
+	                        <option value="security">Security</option>
+	                        <option value="plumber">Plumber</option>
+	                        <option value="electrician">Electrician</option>
+	                        <option value="cleaner">Cleaner</option>
+	                        <option value="health">Health</option>
+	                        <option value="painter">Painter</option>
+                            </select>
+                      </div>
+                      <div class="login100-form">
+                          <label for="staffId">User Number:</label>
+                          <input type="text" class="input100" name="user_number" id="staffId" pattern="[A-Z]+[A-Z]+[0-9]{5,5}" title="2 or 3 capital letters followed by 5 numbers" minlength="7" maxlength="8" required>
+                        </div>
+                        <div class="login100-form">
+                          <label for="lname">First Name:</label>
+                          <input type="text" class="input100" id="lname" name="user_firstname" placeholder="Last Name" pattern="[A-Za-z']+" title="alphabets and ' only" required>
+                        </div>
+                        <div class="login100-form">
+                          <label for="fname">Last Name:</label>
+                          <input type="text" class="input100" id="fname" name="user_lastname" placeholder="First Name" pattern="[A-Za-z']+" title="alphabets and ' only" required>
+                        </div>
+                     
+                        <div class="login100-form">
+                          <label for="email">Email Address:</label>
+                          <input type="email" class="input100" id="email" name="user_email" placeholder="xyz@abc.com" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" title="Use the correct format -----@-----.---" required>
+                        </div>
+                      
+                        <div class="login100-form">
+                          <label for="username">Username:</label>
+                          <input type="text" class="input100" name="username" id="username" placeholder="Username" required="">
+                        </div>
+						<input type="hidden" name="user_hostel" value="">
+                            <input type="hidden" name="user_block" value="">
+                            <input type="hidden"  name="user_room_number" value="">
+                       
             
-            	function displayFunction() { 
-            		
-            		if (document.getElementById("user_role").value == "student"){
-            			var reg_no = document.getElementById("reg_no");
-            			var staff_no = document.getElementById("staff_no");
-            			var hostel = document.getElementById("user_hostel");
-                		var hostel = document.getElementById("user_hostel");
-                		var block = document.getElementById("user_block");
-                		var roomNumber = document.getElementById("user_room_number");
-                		
-                		staff_no.style.visibility = "hidden";
-                		reg_no.style.visibility = "visible";
-                		hostel.style.visibility = "visible";
-                		block.style.visibility = "visible";
-                		roomNumber.style.visibility = "visible";
-                		
-                	} else if (document.getElementById("user_role").value != "student" && document.getElementById("user_role").value != "custodian") {
-                		var reg_no = document.getElementById("reg_no");
-                		var staff_no = document.getElementById("staff_no");
-                		var hostel = document.getElementById("user_hostel");
-                		var block = document.getElementById("user_block");
-                		var roomNumber = document.getElementById("user_room_number");
-                		
-                		reg_no.style.visibility = "hidden";
-                		staff_no.style.visibility = "visible";
-                		hostel.style.visibility = "hidden";
-                		block.style.visibility = "hidden";
-                		roomNumber.style.visibility = "hidden";
-                		
-                	} else if (document.getElementById("user_role").value == "custodian") {
-                		var reg_no = document.getElementById("reg_no");
-                		var staff_no = document.getElementById("staff_no");
-                		var hostel = document.getElementById("user_hostel");
-                		var block = document.getElementById("user_block");
-                		
-                		reg_no.style.visibility = "hidden";
-                		staff_no.style.visibility = "visible";
-                		hostel.style.visibility = "visible";
-                		block.style.visibility = "visible";
-                	}
-            	}
-            	
-                function validateForm()                                    
-                    { 
-                		var user_firstname = document.forms["user_registration_form"]["user_firstname"];               
-                        var user_lastname = document.forms["user_registration_form"]["user_lastname"];
-                        var username = document.forms["user_registration_form"]["username"];
-                        var user_email = document.forms["user_registration_form"]["user_email"];
-                        var password = document.forms["user_registration_form"]["password"];
-                        var confirmPassword = document.forms["user_registration_form"]["confirmPassword"];
-                        
-                        
-                        if (user_firstname.value == "")                                  
-                        { 
-                            window.alert("Please enter your Firstname."); 
-                            user_firstname.focus(); 
-                            return false; 
-                        } 
-
-                        if (user_lastname.value == "")                                  
-                        { 
-                            window.alert("Please enter your Lastname."); 
-                            user_lastname.focus(); 
-                            return false; 
-                        } 
-
-                        if (username.value == "")                                  
-                        { 
-                            window.alert("Please enter your Username."); 
-                            username.focus(); 
-                            return false; 
-                        } 
-                        
-                        if (user_email.value == "")                                  
-                        { 
-                            window.alert("Please enter your Email."); 
-                            user_email.focus(); 
-                            return false; 
-                        } 
-                        
-                        
-                        if (password.value == "")                        
-                        { 
-                            window.alert("Please enter your Password."); 
-                            password.focus(); 
-                            return false; 
-                        } 
-                        
-                        if (confirmPassword.value == "")                        
-                        { 
-                            window.alert("Please confirm your Password."); 
-                            confirmPassword.focus(); 
-                            return false; 
-                        } 
-                        
-                        if (confirmPassword.value == password)                        
-                        { 
-                            window.alert("Your current password does not match with your current password."); 
-                            confirmPassword.focus(); 
-                            return false; 
-                        } 
-
-
-                        return true; 
-                    }
-
-                var check = function() {
-                      if (document.getElementById('password').value ==
-                        document.getElementById('confirmPassword').value) {
-                        document.getElementById('message').style.color = 'green';
-                        document.getElementById('message').innerHTML = 'matching';
-                      } else {
-                        document.getElementById('message').style.color = 'red';
-                        document.getElementById('message').innerHTML = 'not matching';
-                      }
-                    }
-	       </script>
-		</div>
-	</div>
-</body>
+           
+                         <br>
+                         
+                        <center>
+                              <button type="submit" class="login100-form-btn">Register</button>
+                        </center>
+                    </form>
+                    <br>
+                        <center>
+                            <a href="home.jsp">
+                                <button type="submit" class="login100-form-btn">Cancel</button>
+                            </a>
+                        </center>
+                </div>
+        
+            </div>
+        </div>
+      
+	
+  </body>
 </html>
