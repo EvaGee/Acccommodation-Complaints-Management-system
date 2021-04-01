@@ -140,9 +140,9 @@
 <hr class="sidebar-divider">
  
        <li class="nav-item ">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="filteredReports.jsp">
           <i class="fas fa-folder"></i>
-          <span>Reports</span></a>
+          <span>Generate Filtered Reports</span></a>
       </li>
 <hr class="sidebar-divider">
         </ul> 

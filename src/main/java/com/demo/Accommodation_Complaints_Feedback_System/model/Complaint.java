@@ -29,6 +29,16 @@ public class Complaint {
 	
 	@NotBlank
 	private String complaintStatus = "pending";
+
+
+	@NotBlank
+	private String complaintHostel;
+	
+	@NotBlank
+	private String complaintBlock;
+	
+	private int complaintRoomNumber;
+	
 	
 	private int complaint_approved_or_rejected_by = 0;
 	
@@ -50,6 +60,13 @@ public class Complaint {
 
 	public void setComplaint_assigned_by(int complaint_assigned_by) {
 		this.complaint_assigned_by = complaint_assigned_by;
+	}
+	public int getComplaintRoomNumber() {
+		return complaintRoomNumber;
+	}
+
+	public void setComplaintRoomNumber(int complaintRoomNumber) {
+		this.complaintRoomNumber = complaintRoomNumber;
 	}
 
 	public int getComplaint_assigned_to() {
@@ -115,14 +132,49 @@ public class Complaint {
 	public void setComplaint_author_id(int complaint_author_id) {
 		this.complaint_author_id = complaint_author_id;
 	}
+	
 
+	public String getComplaintStatus() {
+		return complaintStatus;
+	}
+
+	public void setComplaintStatus(String complaintStatus) {
+		this.complaintStatus = complaintStatus;
+	}
+	public String getComplaintHostel() {
+		return complaintHostel;
+	}
+
+	public void setComplaintHostel(String complaintHostel) {
+		this.complaintHostel = complaintHostel;
+	}
+
+
+	public String getComplaintBlock() {
+		return complaintBlock;
+	}
+
+	public void setComplaintBlock(String complaintBlock) {
+		this.complaintBlock = complaintBlock;
+	}
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+	
 	@Override
 	public String toString() {
 		return "Complaint [complaint_id=" + complaint_id + ", complaint_category=" + complaint_category
 				+ ", complaint_content=" + complaint_content + ", complaint_status=" + complaintStatus
 				+ ", complaint_approved_or_rejected_by=" + complaint_approved_or_rejected_by + ", complaint_author_id="
 				+ complaint_author_id + ", complaint_assigned_to=" + complaint_assigned_to + ", complaint_assigned_by="
-				+ complaint_assigned_by + ", complaint_done_by=" + complaint_done_by + "]";
+				+ complaint_assigned_by + ", complaint_done_by=" + complaint_done_by+","
+						+ "complaintBlock=" + complaintBlock+  ", complaintRoomNumber=" + complaintRoomNumber+"]";
 	}
-	
+
+
 }

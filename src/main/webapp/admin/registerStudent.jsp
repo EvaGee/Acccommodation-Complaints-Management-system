@@ -103,7 +103,7 @@
                     </form>
                     <br>
                         <center>
-                            <a href="home.jsp">
+                            <a href="adminUI.jsp">
                                 <button type="submit" class="login100-form-btn">Cancel</button>
                             </a>
                         </center>

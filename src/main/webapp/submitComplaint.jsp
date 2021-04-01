@@ -13,7 +13,7 @@
                     <label for="complaint_category">Complaint Category:</label>
                     <select name="complaint_category" id="complaint_category">
 			            <!-- Default -->
-			            <option value="None">Select Options</option>
+			            <option value="">Select Options</option>
 			            
 			            <option value="others">Others</option>
 			            <option value="mason">Masonry</option>
@@ -34,6 +34,9 @@
                   
                   
   		          <input type="hidden" id="complaint_author_id" name="complaint_author_id" value="<%=session.getAttribute("USER_ID")%>">
+  		          <input type="hidden" id="complaint_author_id" name="complaintHostel" value="<%=session.getAttribute("USER_HOSTEL")%>">
+  		          <input type="hidden" id="complaint_author_id" name="complaintBlock" value="<%=session.getAttribute("USER_BLOCK")%>">
+  		          <input type="hidden" id="complaint_author_id" name="complaintRoomNumber" value="<%=session.getAttribute("USER_ROOM_NUMBER")%>">
                
                   <button type="submit" class="btn btn-success btn-block">Submit</button>
             </form>

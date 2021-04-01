@@ -158,7 +158,9 @@
                     <td>Complaint Category</td>
 				<td>Complaint Content</td>
 				<td>Complaint Author: (ID)</td>
-				<td>Complaint Status</td>
+				<td>Hostel</td>
+				<td>Block</td>
+				<td>Room Number</td>
 				<td>Complaint Approved By: (ID)</td>
 				<td>Assign to:</td>
                   </tr>
@@ -169,7 +171,7 @@
                 try{
                 	connection = DriverManager.getConnection(connectionUrl, userId, password);
         			statement=connection.createStatement();
-        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'approved' AND complaint_assigned_to = 0 ORDER BY complaint_id DESC";
+        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'approved'  AND complaint_hostel ='"+session.getAttribute("USER_HOSTEL")+"' AND complaint_assigned_to = 0 ORDER BY complaint_id DESC";
 
         			resultSet = statement.executeQuery(sql);
         			while(resultSet.next()){
@@ -178,7 +180,9 @@
         				<td><%out.println(resultSet.getString("complaint_category")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
         		    	<td><a href='user/<%out.println(resultSet.getString("complaint_author_id")); %>'><%out.println(resultSet.getString("complaint_author_id")); %></a></td>
-        		    	<td><%out.println(resultSet.getString("complaint_status")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_hostel")); %></td>
+				    	<td><%out.println(resultSet.getString("complaint_block")); %></td>
+				    	<td><%out.println(resultSet.getString("complaint_room_number")); %></td>
         		    	<td><a href='user/<%out.println(resultSet.getString("complaint_approved_or_rejected_by")); %>'><%out.println(resultSet.getString("complaint_approved_or_rejected_by")); %></a></td>
         		    	<%if(resultSet.getString("complaint_category").equals("plumber")){ %>
         		    	<td>><a href='custodianUI.jsp/plumber/<%out.println(resultSet.getString("complaint_id")); %>'>Plumber</a></td>

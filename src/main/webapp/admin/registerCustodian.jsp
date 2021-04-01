@@ -31,7 +31,7 @@
 					<div class="login100-form">
                             <input type="hidden" name="user_role" value="custodian">
                             <input type="hidden" name="user_block" value="">
-                            <input type="hidden"  name="user_room_number" value="">
+                            <input type="hidden"  name="user_room_number" value="0">
                       </div>
                       <div class="login100-form">
                           <label for="staffId">User Number:</label>
@@ -94,7 +94,7 @@
                     </form>
                     <br>
                         <center>
-                            <a href="home.jsp">
+                            <a href="adminUI.jsp">
                                 <button type="submit" class="login100-form-btn">Cancel</button>
                             </a>
                         </center>

@@ -49,11 +49,11 @@
                         </div>
                         <div class="login100-form">
                           <label for="lname">First Name:</label>
-                          <input type="text" class="input100" id="lname" name="user_firstname" placeholder="Last Name" pattern="[A-Za-z']+" title="alphabets and ' only" required>
+                          <input type="text" class="input100"  name="user_firstname" pattern="[A-Za-z']+" title="alphabets and ' only">
                         </div>
                         <div class="login100-form">
                           <label for="fname">Last Name:</label>
-                          <input type="text" class="input100" id="fname" name="user_lastname" placeholder="First Name" pattern="[A-Za-z']+" title="alphabets and ' only" required>
+                          <input type="text" class="input100"  name="user_lastname" placeholder="First Name" pattern="[A-Za-z']+" title="alphabets and ' only" required>
                         </div>
                      
                         <div class="login100-form">
@@ -67,7 +67,7 @@
                         </div>
 						<input type="hidden" name="user_hostel" value="">
                             <input type="hidden" name="user_block" value="">
-                            <input type="hidden"  name="user_room_number" value="">
+                            <input type="hidden"  name="user_room_number" value="0">
                        
             
            
@@ -79,7 +79,7 @@
                     </form>
                     <br>
                         <center>
-                            <a href="home.jsp">
+                            <a href="adminUI.jsp">
                                 <button type="submit" class="login100-form-btn">Cancel</button>
                             </a>
                         </center>
@@ -87,7 +87,18 @@
         
             </div>
         </div>
-      
+  <script>
+  function validate(input){
+	  var letters=/^[A-Za-z']+$/;
+	  val=input.value.replace(/\s/g, '');
+	  if(val.match(letters)){
+		  alert(okay);
+		  else{
+			  alert("error")
+		  }
+	  }
+  }
+  </script>    
 	
   </body>
 </html>

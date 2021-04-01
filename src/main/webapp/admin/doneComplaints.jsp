@@ -221,7 +221,7 @@
         				<td><%out.println(resultSet.getString("complaint_category")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_author_id")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_approved_by")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_approved_or_rejected_by")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_assigned_to")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_assigned_by")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_done_by")); %></td>

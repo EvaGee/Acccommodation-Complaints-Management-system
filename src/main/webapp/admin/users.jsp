@@ -139,10 +139,10 @@
       
 <hr class="sidebar-divider">
  
-       <li class="nav-item ">
-        <a class="nav-link" href="#">
+      <li class="nav-item ">
+        <a class="nav-link" href="filteredReports.jsp">
           <i class="fas fa-folder"></i>
-          <span>Reports</span></a>
+          <span>Generate Filtered Reports</span></a>
       </li>
       
 <hr class="sidebar-divider">
@@ -203,7 +203,6 @@
 				<td>Username</td>
 				<td>Email</td>
 				<td>User Role</td>
-				<td>Created At</td>
 				<td>Delete</td>
                   </tr>
                   
@@ -226,7 +225,6 @@
 		    	<td><%out.println(resultSet.getString("username")); %></td>
 		    	<td><%out.println(resultSet.getString("user_email")); %></td>
 		    	<td><%out.println(resultSet.getString("user_role")); %></td>
-		    	<td><%out.println(resultSet.getString("created_at")); %></td>
 		    	<td><a href='users.jsp/delete/<%out.println(resultSet.getString("user_id")); %>'>Delete</a></td>
         			</tr>
     				<%

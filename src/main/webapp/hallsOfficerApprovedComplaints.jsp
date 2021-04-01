@@ -194,6 +194,32 @@
     			    } catch (Exception e) {
     			    e.printStackTrace();
     			    }
+                try{
+        			connection = DriverManager.getConnection(connectionUrl, userId, password);
+        			statement=connection.createStatement();
+        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'assigned' AND complaint_approved_or_rejected_by = "+ session.getAttribute("USER_ID") +" ORDER BY complaint_id DESC";
+
+        			resultSet = statement.executeQuery(sql);
+        			while(resultSet.next()){
+        			%>
+        			<tr>
+        				<td><%out.println(resultSet.getString("complaint_category")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_author_id")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_status")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_approved_or_rejected_by")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_assigned_to")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_done_by")); %></td>
+        		    	<td><%out.println(resultSet.getString("created_at")); %></td>
+        		    	<td><a href='hallsOfficerView.jsp/approve/<%out.println(resultSet.getString("complaint_id")); %>/<%=session.getAttribute("USER_ID")%>/'>Approve</a></td>
+        		    	<td><a href='hallsOfficerView.jsp/reject/<%out.println(resultSet.getString("complaint_id")); %>/<%=session.getAttribute("USER_ID")%>/'>Reject</a></td>
+        			</tr>
+    				<%
+    			    }
+
+    			    } catch (Exception e) {
+    			    e.printStackTrace();
+    			    }
 			%>
                 </tbody>
                 </table>

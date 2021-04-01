@@ -65,13 +65,8 @@
                               <button type="submit" class="login100-form-btn">Login</button>
                         </center>
                     </form>
-                    <br>
-                        <center>
-                            <a href="home.jsp">
-                                <button type="submit" class="login100-form-btn">Cancel</button>
-                            </a>
-                        </center>
-                </div>
+                   
+                                        </div>
         
             </div>
         </div>

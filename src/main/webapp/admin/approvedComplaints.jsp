@@ -139,10 +139,10 @@
       
 <hr class="sidebar-divider">
  
-       <li class="nav-item ">
-        <a class="nav-link" href="#">
+        <li class="nav-item ">
+        <a class="nav-link" href="filteredReports.jsp">
           <i class="fas fa-folder"></i>
-          <span>Reports</span></a>
+          <span>Generate Filtered Reports</span></a>
       </li>
 <hr class="sidebar-divider">
         </ul> 
@@ -219,7 +219,7 @@
         				<td><%out.println(resultSet.getString("complaint_category")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_author_id")); %></td>
-        		    	
+        		    	<td><%out.println(resultSet.getString("complaint_approved_or_rejected_by")); %></td>
         			</tr>
  
     				<%

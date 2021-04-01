@@ -45,23 +45,9 @@ public class HallsController {
 	
 	//register new user
 	@PostMapping("/register_user")
-	public String addUser(@RequestParam String user_number, @RequestParam String user_firstname, @RequestParam String user_lastname, @RequestParam String username, @RequestParam String user_email, @RequestParam String user_role, @RequestParam String user_hostel, @RequestParam String user_block, @RequestParam String user_room_number) {
+	public String addUser(@RequestParam String user_number, @RequestParam String user_firstname, @RequestParam String user_lastname, @RequestParam String username, @RequestParam String user_email, @RequestParam String user_role, @RequestParam String user_hostel, @RequestParam String user_block, @RequestParam Integer user_room_number) {
 		User user = new User();
-		if(user_hostel == "" && user_block == "" && user_room_number == "") {
-			user.setUser_number(user_number);
-			user.setUser_firstname(user_firstname);
-			user.setUser_lastname(user_lastname);
-			user.setUsername(username);
-			user.setUser_email(user_email);
-			user.setUser_role(user_role);
-			user.setUser_hostel("");
-			user.setUser_block("");
-			user.setUser_room_number(0);
-			user.setPassword(user_number);
-			
-			service.saveUser(user);
-			
-		} else if(user_room_number == "") {
+		
 			user.setUser_number(user_number);
 			user.setUser_firstname(user_firstname);
 			user.setUser_lastname(user_lastname);
@@ -70,24 +56,12 @@ public class HallsController {
 			user.setUser_role(user_role);
 			user.setUser_hostel(user_hostel);
 			user.setUser_block(user_block);
-			user.setUser_room_number(0);
+			user.setUser_room_number(user_room_number);
 			user.setPassword(user_number);
 			
 			service.saveUser(user);
-		} else {
-			user.setUser_number(user_number);
-			user.setUser_firstname(user_firstname);
-			user.setUser_lastname(user_lastname);
-			user.setUsername(username);
-			user.setUser_email(user_email);
-			user.setUser_role(user_role);
-			user.setUser_hostel(user_hostel);
-			user.setUser_block(user_block);
-			user.setUser_room_number(Integer.parseInt(user_room_number));
-			user.setPassword(user_number);
 			
-			service.saveUser(user);
-		}
+		
 		
 		return "redirect:/admin/adminUI.jsp";
 	}
@@ -806,12 +780,16 @@ public class HallsController {
 	}
 
 	@PostMapping("/submitComplaint")
-	public String submitComplaint(@RequestParam String complaint_category, @RequestParam String complaint_content, @RequestParam int complaint_author_id){
+	public String submitComplaint(@RequestParam String complaint_category, @RequestParam String complaint_content, @RequestParam int complaint_author_id,
+			@RequestParam String complaintHostel, @RequestParam String complaintBlock, @RequestParam int complaintRoomNumber){
 		
 		Complaint complaint =new Complaint();
 		complaint.setComplaint_category(complaint_category);
 		complaint.setComplaint_content(complaint_content);
 		complaint.setComplaint_author_id(complaint_author_id);
+		complaint.setComplaintHostel(complaintHostel);
+		complaint.setComplaintBlock(complaintBlock);
+		complaint.setComplaintRoomNumber(complaintRoomNumber);
 		
 		service.saveComplaint(complaint);
 		return "redirect:/studentUI.jsp";
@@ -1286,14 +1264,14 @@ public class HallsController {
                    
                 }
 		JasperPrint jasper=null;
-		if(complaintStatus.equals("all")) {jasper= service.testReport(startDate, endDate);}
+		if(complaintStatus.equals("all")) {jasper= service.testReport(complaintStatus,startDate, endDate);}
     	
 		else {
     	 jasper= service.testReport(complaintStatus,startDate, endDate);
 		}
     	 byte[] pdf = null;
     	 
-    	 String filename = complaintStatus+startDate+endDate+" complaints.pdf";
+    	 String filename = "from"+startDate+"To"+endDate+complaintStatus+" complaints.pdf";
     	 
     	 pdf = JasperExportManager.exportReportToPdf(jasper);
     	 
