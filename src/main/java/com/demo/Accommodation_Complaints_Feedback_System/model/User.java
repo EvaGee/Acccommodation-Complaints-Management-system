@@ -4,8 +4,6 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -18,11 +16,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class User {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int user_id;
-	
 	@NotBlank
-	private String user_number;
+
+	private String userNumber;
 	
 	@NotBlank
 	private String user_firstname;
@@ -37,13 +34,13 @@ public class User {
 	private String user_email;
 	
 	@NotBlank
-	private String user_role;
+	private String userRole;
 	
 	private String user_hostel;
 	
 	private String user_block;
 	
-	private int user_room_number;
+	private String user_room_number;
 	
 	@CreatedDate
 	private Date createdAt;
@@ -68,11 +65,11 @@ public class User {
 		this.user_block = user_block;
 	}
 
-	public int getUser_room_number() {
+	public String getUser_room_number() {
 		return user_room_number;
 	}
 
-	public void setUser_room_number(int user_room_number) {
+	public void setUser_room_number(String user_room_number) {
 		this.user_room_number = user_room_number;
 	}
 
@@ -84,12 +81,12 @@ public class User {
 		this.user_id = user_id;
 	}
 
-	public String getUser_number() {
-		return user_number;
+	public String getUserNumber() {
+		return userNumber;
 	}
 
-	public void setUser_number(String user_number) {
-		this.user_number = user_number;
+	public void setUserNumber(String userNumber) {
+		this.userNumber = userNumber;
 	}
 
 	public String getUser_firstname() {
@@ -124,12 +121,12 @@ public class User {
 		this.user_email = user_email;
 	}
 
-	public String getUser_role() {
-		return user_role;
+	public String getUserRole() {
+		return userRole;
 	}
 
-	public void setUser_role(String user_role) {
-		this.user_role = user_role;
+	public void setUserRole(String userRole) {
+		this.userRole = userRole;
 	}
 
 	public String getPassword() {
@@ -142,9 +139,9 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [user_id=" + user_id + ", user_number=" + user_number + ", user_firstname=" + user_firstname
+		return "User [user_id=" + user_id + ", user_number=" + userNumber + ", user_firstname=" + user_firstname
 				+ ", user_lastname=" + user_lastname + ", username=" + username + ", user_email=" + user_email
-				+ ", user_role=" + user_role + ", user_hostel=" + user_hostel + ", user_block=" + user_block
+				+ ", user_role=" + userRole + ", user_hostel=" + user_hostel + ", user_block=" + user_block
 				+ ", user_room_number=" + user_room_number + ", password=" + password + "]";
 	}
 

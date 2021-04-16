@@ -74,7 +74,7 @@
       <hr class="sidebar-divider my-0">
 
       <!-- Nav Item - Dashboard -->
-      <li class="nav-item active">
+      <li class="nav-item ">
         <a class="nav-link" href="custodianUI.jsp">
           <i class="fas fa-list"></i>
           <span>Dashboard</span></a>
@@ -84,7 +84,7 @@
       <hr class="sidebar-divider">
 
       <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
+      <li class="nav-item active">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-cog"></i>
           <span>Complaints</span>
@@ -95,6 +95,24 @@
             <a class="collapse-item" href="assignedComplaints.jsp">Assigned</a>
             <a class="collapse-item" href="custodianWorkspace.jsp">Workspace</a>
             <a class="collapse-item" href="custodianDoneComplaints.jsp">Done Complaints</a>
+            
+          </div>
+        </div>
+      </li>
+
+      
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+ <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>Disciplinary</span>
+        </a>
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+          	 <a class="collapse-item" href="custodianStudents.jsp">Report students</a>
+            <a class="collapse-item" href="reports.jsp">View reported students</a>
             
           </div>
         </div>
@@ -155,12 +173,13 @@
                 <thead>
                  <tr>
                     
-                    <td>Complaint Category</td>
-				<td>Complaint Content</td>
+                
 				<td>Complaint Author: (ID)</td>
 				<td>Hostel</td>
 				<td>Block</td>
 				<td>Room Number</td>
+				<td>Complaint Category</td>
+				<td>Complaint Content</td>
 				<td>Complaint Approved By: (ID)</td>
 				<td>Assign to:</td>
                   </tr>
@@ -171,21 +190,22 @@
                 try{
                 	connection = DriverManager.getConnection(connectionUrl, userId, password);
         			statement=connection.createStatement();
-        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'approved'  AND complaint_hostel ='"+session.getAttribute("USER_HOSTEL")+"' AND complaint_assigned_to = 0 ORDER BY complaint_id DESC";
+        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'approved'  AND complaint_hostel ='"+session.getAttribute("USER_HOSTEL")+"' AND complaint_assigned_to ='none' ORDER BY complaint_id DESC";
 
         			resultSet = statement.executeQuery(sql);
         			while(resultSet.next()){
         			%>
         			<tr>
-        				<td><%out.println(resultSet.getString("complaint_category")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
-        		    	<td><a href='user/<%out.println(resultSet.getString("complaint_author_id")); %>'><%out.println(resultSet.getString("complaint_author_id")); %></a></td>
+        				
+        		    	<td><%out.println(resultSet.getString("complaint_author_id")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_hostel")); %></td>
 				    	<td><%out.println(resultSet.getString("complaint_block")); %></td>
 				    	<td><%out.println(resultSet.getString("complaint_room_number")); %></td>
-        		    	<td><a href='user/<%out.println(resultSet.getString("complaint_approved_or_rejected_by")); %>'><%out.println(resultSet.getString("complaint_approved_or_rejected_by")); %></a></td>
+				    	<td><%out.println(resultSet.getString("complaint_category")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_approved_or_rejected_by")); %></td>
         		    	<%if(resultSet.getString("complaint_category").equals("plumber")){ %>
-        		    	<td>><a href='custodianUI.jsp/plumber/<%out.println(resultSet.getString("complaint_id")); %>'>Plumber</a></td>
+        		    	<td><a href='custodianUI.jsp/plumber/<%out.println(resultSet.getString("complaint_id")); %>'>Plumber</a></td>
         		    	<% } else if(resultSet.getString("complaint_category").equals("mason")){ %>
         		    	<td><a href='custodianUI.jsp/mason/<%out.println(resultSet.getString("complaint_id")); %>'>Mason</a></td>
         		    	<% } else if(resultSet.getString("complaint_category").equals("carpenter")){ %>
@@ -201,7 +221,7 @@
         		    	<% } else if(resultSet.getString("complaint_category").equals("cleaner")){ %>
         		    	<td><a href='custodianUI.jsp/cleaner/<%out.println(resultSet.getString("complaint_id")); %>'>Cleaner</a></td>
         		    	<% } else if(resultSet.getString("complaint_category").equals("custodian") || resultSet.getString("complaint_category").equals("others") ){ %>
-        		    	<td><a href='custodianUI.jsp/custodian/<%out.println(resultSet.getString("complaint_id")); %>'>Custodian</a></td>
+		    	<td><a href="custodianWorkspace.jsp">Custodian</a></td>
         		    	<% } %>
         			</tr>
 			

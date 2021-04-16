@@ -22,20 +22,20 @@
 	<div class="limiter">
             <div class="container-login100" style="background-image: url('images/gate1.jpg');">
 		<div class="wrap-login100">
-                    <form class="login100-form validate-form" method="post" action="/register_user" name="login_form" id="login_form">
+                    <form class="login100-form validate-form" method="post" action="/registerUser" name="login_form" id="login_form">
                        
                         <span class="login100-form-title p-b-34 p-t-27">
                             Register Custodian
 						</span>
-
+					<p>${message}</p>
 					<div class="login100-form">
                             <input type="hidden" name="user_role" value="custodian">
                             <input type="hidden" name="user_block" value="">
-                            <input type="hidden"  name="user_room_number" value="0">
+                            <input type="hidden"  name="user_room_number" value="">
                       </div>
                       <div class="login100-form">
                           <label for="staffId">User Number:</label>
-                          <input type="text" class="input100" name="user_number" id="staffId" pattern="[A-Z]+[A-Z]+[0-9]{5,5}" title="2 or 3 capital letters followed by 5 numbers" minlength="7" maxlength="8" required>
+                          <input type="text" class="input100" name="user_number" id="staffId" pattern="[0-9]{5,5}" title=" 5 numbers only" minlength="5" maxlength="5" required>
                         </div>
                         <div class="login100-form">
                           <label for="lname">First Name:</label>

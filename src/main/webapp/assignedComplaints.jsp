@@ -74,7 +74,7 @@
       <hr class="sidebar-divider my-0">
 
       <!-- Nav Item - Dashboard -->
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link" href="custodianUI.jsp">
           <i class="fas fa-list"></i>
           <span>Dashboard</span></a>
@@ -84,7 +84,7 @@
       <hr class="sidebar-divider">
 
       <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
+      <li class="nav-item active">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-cog"></i>
           <span>Complaints</span>
@@ -94,6 +94,7 @@
           	 <a class="collapse-item" href="custodianView.jsp">View Complaints</a>
             <a class="collapse-item" href="assignedComplaints.jsp">Assigned</a>
             <a class="collapse-item" href="custodianWorkspace.jsp">Workspace</a>
+            <a class="collapse-item" href="custodianDoneComplaints.jsp">Done</a>
             
           </div>
         </div>
@@ -154,13 +155,15 @@
                 <thead>
                  <tr>
                     
-                    <td>Complaint Category</td>
-				<td>Complaint Content</td>
+                
 				<td>Complaint Author: (ID)</td>
-				<td>Complaint Status</td>
+				<td>Complaint Hostel</td>
+				<td>Complaint Block</td>
+				<td>Complaint Room number</td>
+				<td>Complaint Category</td>
+				<td>Complaint Content</td>
 				<td>Complaint Assigned To (ID):</td>
 				<td>Complaint Assigned By (ID):</td>
-				<td>Complaint Done By: (ID)</td>
 				<td>Unassign Complaint</td>
                   
                 </thead>
@@ -169,19 +172,21 @@
                 try{
         			connection = DriverManager.getConnection(connectionUrl, userId, password);
         			statement=connection.createStatement();
-        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'assigned' AND complaint_assigned_by = "+ session.getAttribute("USER_ID") +" ORDER BY complaint_id DESC";
+        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'assigned' AND complaint_assigned_by = '"+ session.getAttribute("USER_NUMBER") +"' ORDER BY complaint_id DESC";
 
         			resultSet = statement.executeQuery(sql);
         			while(resultSet.next()){
         			%>
         			<tr>
-        				<td><%out.println(resultSet.getString("complaint_category")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
+        				
         		    	<td><%out.println(resultSet.getString("complaint_author_id")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_status")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_hostel")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_block")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_room_number")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_category")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_assigned_to")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_assigned_by")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_done_by")); %></td>
         		    	<td><a href='assignedComplaints.jsp/unassign/<%out.println(resultSet.getString("complaint_id")); %>'>Unassign</a></td>
         			</tr>
 			<% 

@@ -44,7 +44,7 @@
               <div class="dropdown-menu dropdown-menu-right user-dd animated">
                             <a class="dropdown-item" href="#ViewProfile"><span class="fa fa-user"></span> My Profile</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="login.jsp"><i class="fa fa-power-off m-r-5 m-l-5"></i> Logout</a>
+                            <a class="dropdown-item" href="logout"><i class="fa fa-power-off m-r-5 m-l-5"></i> Logout</a>
               </div>
               </a>
           </li>
@@ -153,7 +153,7 @@
                 <thead>
                  <tr>
                     
-                    <td>Complaint Category</td>
+               	<td>Complaint Category</td>
 				<td>Complaint Content</td>
 				<td>Complaint Author ID</td>
 				<td>Complaint Status</td>
@@ -161,7 +161,6 @@
 				<td>Complaint Assigned To: (ID)</td>
 				<td>Complaint Done By: (ID)</td>
 				<td>Created At:</td>
-				<td>Delete</td>
                   </tr>
                 </thead>
                 <tbody>
@@ -169,7 +168,7 @@
 			try{
 			connection = DriverManager.getConnection(connectionUrl, userId, password);
 			statement=connection.createStatement();
-			String sql ="SELECT * FROM complaints WHERE complaint_author_id = '"+session.getAttribute("USER_ID")+"' ORDER BY complaint_id DESC";
+			String sql ="SELECT * FROM complaints WHERE complaint_author_id = '"+session.getAttribute("USER_NUMBER")+"' ORDER BY complaint_id DESC";
 
 			resultSet = statement.executeQuery(sql);
 			while(resultSet.next()){
@@ -183,7 +182,6 @@
 		    	<td><%out.println(resultSet.getString("complaint_assigned_to")); %></td>
 		    	<td><%out.println(resultSet.getString("complaint_done_by")); %></td>
 		    	<td><%out.println(resultSet.getString("created_at")); %></td>
-		    	<td><a href='status.jsp/delete/<%out.println(resultSet.getString("complaint_id")); %>'>Delete</a></td>
 			</tr>
 
 			<%
@@ -194,6 +192,12 @@
 		    }
             
                 %>
+                <tr>
+			<form action="/studentReport" method="post">
+     <input type="hidden" name="complaintAuthor" value="<%=session.getAttribute("USER_NUMBER")%>">
+                <button type="submit" class="btn btn-success btn-block">Print</button>
+     			</form>
+			</tr>
                 </tbody>
                 </table>
     </section>

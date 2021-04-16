@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,15 +22,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.demo.Accommodation_Complaints_Feedback_System.dao.ServiceHalls;
 import com.demo.Accommodation_Complaints_Feedback_System.model.User;
+import com.demo.Accommodation_Complaints_Feedback_System.repository.UserRepository;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import com.demo.Accommodation_Complaints_Feedback_System.model.Complaint;
+import com.demo.Accommodation_Complaints_Feedback_System.model.Hostel;
 import com.demo.Accommodation_Complaints_Feedback_System.model.Report;
 
 @Controller
@@ -38,32 +42,73 @@ public class HallsController {
 	@Autowired
 	ServiceHalls service;
 	
+	@Autowired
+	UserRepository user_repository;
+	
+	
 	@RequestMapping("/")
 	public String getUser() {
 		return "login.jsp";
 	}
 	
 	//register new user
-	@PostMapping("/register_user")
-	public String addUser(@RequestParam String user_number, @RequestParam String user_firstname, @RequestParam String user_lastname, @RequestParam String username, @RequestParam String user_email, @RequestParam String user_role, @RequestParam String user_hostel, @RequestParam String user_block, @RequestParam Integer user_room_number) {
-		User user = new User();
+	@PostMapping("/registerUser")
+	public String addUser(@RequestParam String user_number, @RequestParam String user_firstname, @RequestParam String user_lastname, 
+			@RequestParam String username, @RequestParam String user_email, @RequestParam String user_role, @RequestParam String user_hostel, 
+			@RequestParam String user_block, @RequestParam String user_room_number, @RequestParam String bedNo,
+			Model model) {
 		
-			user.setUser_number(user_number);
+		User user1=service.getUser(user_number);
+		if(user1==null) {
+			User user = new User();
+			
+			user.setUserNumber(user_number);
 			user.setUser_firstname(user_firstname);
 			user.setUser_lastname(user_lastname);
 			user.setUsername(username);
 			user.setUser_email(user_email);
-			user.setUser_role(user_role);
+			user.setUserRole(user_role);
 			user.setUser_hostel(user_hostel);
 			user.setUser_block(user_block);
 			user.setUser_room_number(user_room_number);
 			user.setPassword(user_number);
 			
-			service.saveUser(user);
 			
+			service.saveUser(user);
+			String message1="User successfully registered";
+			model.addAttribute("message", message1);
+			
+		if(user.getUserRole().equals("student")) {
+			Hostel hostel=service.getHostelAndBedNo(user_hostel, user_block, user_room_number, bedNo);
+			
+			hostel.setVacancy(user_number);
+			return "redirect:admin/registerStudent.jsp";	
+		}
+		else if(user.getUserRole().equals("custodian")) {
+			return "redirect:admin/registerCustodian.jsp";	
+		}
+		else{
+			return "redirect:admin/register_user.jsp";	
+		}
+		}
+		else if(user1!=null && user1.getUserRole().equals("student")) {
+			String message1="Registration unsuccessful, Student already registered";
+			model.addAttribute("message", message1);
+			return "redirect:admin/registerStudent.jsp";	
+		}
+		else if(user1!=null && user1.getUserRole().equals("custodian")) {
+			String message1="Registration unsuccessful,Staff already registered, try again";
+			model.addAttribute("message", message1);
+			return "redirect:admin/registerCustodian.jsp";	
+		}
+		else
+		{	
+			String message1="Registration unsuccessful,Staff already registered, try again";
+			model.addAttribute("message", message1);
+			return "redirect:admin/register_user.jsp";	
+		}
 		
 		
-		return "redirect:/admin/adminUI.jsp";
 	}
 	
 	//delete user
@@ -81,7 +126,7 @@ public class HallsController {
 		 switch (user_role) {  
 			 case "admin":  
 				User admin = service.getUser(username, password);
-				if(admin!=null && admin.getUser_role().equals("admin")) {
+				if(admin!=null && admin.getUserRole().equals("admin")) {
 					
 					//Save Sessions
 					@SuppressWarnings("unchecked")
@@ -114,7 +159,7 @@ public class HallsController {
 					user_id.add(admin.getUser_id());
 					user_firstname.add(admin.getUser_firstname());
 					user_lastname.add(admin.getUser_lastname());
-					user_number.add(admin.getUser_number());
+					user_number.add(admin.getUserNumber());
 					user_email.add(admin.getUser_email());
 					
 					request.getSession().setAttribute("USER_ID", user_id.toString().replace("[", "").replace("]", ""));
@@ -122,7 +167,7 @@ public class HallsController {
 					request.getSession().setAttribute("USER_LASTNAME", user_lastname.toString().replace("[", "").replace("]", ""));
 					request.getSession().setAttribute("USER_NUMBER", user_number.toString().replace("[", "").replace("]", ""));
 					request.getSession().setAttribute("USER_EMAIL", user_email.toString().replace("[", "").replace("]", ""));
-					if (password.equals(admin.getUser_number())) {
+					if (password.equals(admin.getUserNumber())) {
 						return "redirect:/admin/profile.jsp";
 					} else {	
 					return "redirect:/admin/adminUI.jsp";
@@ -133,7 +178,7 @@ public class HallsController {
 				
 			 case "student":  
 					User student = service.getUser(username, password);
-					if(student!=null && student.getUser_role().equals("student")) {
+					if(student!=null && student.getUserRole().equals("student")) {
 						
 						//Save Sessions
 						@SuppressWarnings("unchecked")
@@ -178,7 +223,7 @@ public class HallsController {
 						user_id.add(student.getUser_id());
 						user_firstname.add(student.getUser_firstname());
 						user_lastname.add(student.getUser_lastname());
-						user_number.add(student.getUser_number());
+						user_number.add(student.getUserNumber());
 						user_email.add(student.getUser_email());
 						user_hostel.add(student.getUser_hostel());
 						user_block.add(student.getUser_block());
@@ -192,7 +237,7 @@ public class HallsController {
 						request.getSession().setAttribute("USER_HOSTEL", user_hostel.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_BLOCK", user_block.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_ROOM_NUMBER", user_room_number.toString().replace("[", "").replace("]", ""));
-						if (password.equals(student.getUser_number())) {
+						if (password.equals(student.getUserNumber())) {
 							return "redirect:/profile.jsp";
 						} else {
 						return "redirect:/studentUI.jsp";
@@ -203,7 +248,7 @@ public class HallsController {
 				
 			 case "halls_officer":  
 					User halls_officer = service.getUser(username, password);
-					if(halls_officer!=null && halls_officer.getUser_role().equals("halls_officer")) {
+					if(halls_officer!=null && halls_officer.getUserRole().equals("halls_officer")) {
 						
 						//Save Sessions
 						@SuppressWarnings("unchecked")
@@ -236,7 +281,7 @@ public class HallsController {
 						user_id.add(halls_officer.getUser_id());
 						user_firstname.add(halls_officer.getUser_firstname());
 						user_lastname.add(halls_officer.getUser_lastname());
-						user_number.add(halls_officer.getUser_number());
+						user_number.add(halls_officer.getUserNumber());
 						user_email.add(halls_officer.getUser_email());
 						
 						request.getSession().setAttribute("USER_ID", user_id.toString().replace("[", "").replace("]", ""));
@@ -245,7 +290,7 @@ public class HallsController {
 						request.getSession().setAttribute("USER_NUMBER", user_number.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_EMAIL", user_email.toString().replace("[", "").replace("]", ""));
 						
-						if (password.equals(halls_officer.getUser_number())) {
+						if (password.equals(halls_officer.getUserNumber())) {
 							return "redirect:/profile.jsp";
 						} else {
 						return "redirect:/hallsOfficerUI.jsp";
@@ -256,7 +301,7 @@ public class HallsController {
 				
 			 case "custodian":  
 					User custodian = service.getUser(username, password);
-					if(custodian!=null && custodian.getUser_role().equals("custodian")) {
+					if(custodian!=null && custodian.getUserRole().equals("custodian")) {
 						
 						//Save Sessions
 						@SuppressWarnings("unchecked")
@@ -295,7 +340,7 @@ public class HallsController {
 						user_id.add(custodian.getUser_id());
 						user_firstname.add(custodian.getUser_firstname());
 						user_lastname.add(custodian.getUser_lastname());
-						user_number.add(custodian.getUser_number());
+						user_number.add(custodian.getUserNumber());
 						user_email.add(custodian.getUser_email());
 						user_hostel.add(custodian.getUser_hostel());
 						
@@ -307,7 +352,7 @@ public class HallsController {
 						request.getSession().setAttribute("USER_EMAIL", user_email.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_HOSTEL", user_hostel.toString().replace("[", "").replace("]", ""));
 						
-						if (password.equals(custodian.getUser_number())) {
+						if (password.equals(custodian.getUserNumber())) {
 							return "redirect:/profile.jsp";
 						} else {
 						return "redirect:/custodianUI.jsp";
@@ -319,7 +364,7 @@ public class HallsController {
 					
 			 case "plumber":  
 					User plumber = service.getUser(username, password);
-					if(plumber!=null && plumber.getUser_role().equals("plumber")) {
+					if(plumber!=null && plumber.getUserRole().equals("plumber")) {
 						
 						//Save Sessions
 						@SuppressWarnings("unchecked")
@@ -352,7 +397,7 @@ public class HallsController {
 						user_id.add(plumber.getUser_id());
 						user_firstname.add(plumber.getUser_firstname());
 						user_lastname.add(plumber.getUser_lastname());
-						user_number.add(plumber.getUser_number());
+						user_number.add(plumber.getUserNumber());
 						user_email.add(plumber.getUser_email());
 						
 						request.getSession().setAttribute("USER_ID", user_id.toString().replace("[", "").replace("]", ""));
@@ -360,7 +405,7 @@ public class HallsController {
 						request.getSession().setAttribute("USER_LASTNAME", user_lastname.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_NUMBER", user_number.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_EMAIL", user_email.toString().replace("[", "").replace("]", ""));
-						if (password.equals(plumber.getUser_number())) {
+						if (password.equals(plumber.getUserNumber())) {
 							return "redirect:/profile.jsp";
 						} else {
 						return "redirect:/plumberUI.jsp";
@@ -371,7 +416,7 @@ public class HallsController {
 					
 			 case "mason":  
 					User mason = service.getUser(username, password);
-					if(mason!=null && mason.getUser_role().equals("mason")) {
+					if(mason!=null && mason.getUserRole().equals("mason")) {
 						
 						//Save Sessions
 						@SuppressWarnings("unchecked")
@@ -404,7 +449,7 @@ public class HallsController {
 						user_id.add(mason.getUser_id());
 						user_firstname.add(mason.getUser_firstname());
 						user_lastname.add(mason.getUser_lastname());
-						user_number.add(mason.getUser_number());
+						user_number.add(mason.getUserNumber());
 						user_email.add(mason.getUser_email());
 						
 						request.getSession().setAttribute("USER_ID", user_id.toString().replace("[", "").replace("]", ""));
@@ -412,7 +457,7 @@ public class HallsController {
 						request.getSession().setAttribute("USER_LASTNAME", user_lastname.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_NUMBER", user_number.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_EMAIL", user_email.toString().replace("[", "").replace("]", ""));
-						if (password.equals(mason.getUser_number())) {
+						if (password.equals(mason.getUserNumber())) {
 							return "redirect:/profile.jsp";
 						} else {
 						return "redirect:/masonUI.jsp";
@@ -423,7 +468,7 @@ public class HallsController {
 					
 			 case "carpenter":  
 					User carpenter = service.getUser(username, password);
-					if(carpenter!=null && carpenter.getUser_role().equals("carpenter")) {
+					if(carpenter!=null && carpenter.getUserRole().equals("carpenter")) {
 						
 						//Save Sessions
 						@SuppressWarnings("unchecked")
@@ -456,7 +501,7 @@ public class HallsController {
 						user_id.add(carpenter.getUser_id());
 						user_firstname.add(carpenter.getUser_firstname());
 						user_lastname.add(carpenter.getUser_lastname());
-						user_number.add(carpenter.getUser_number());
+						user_number.add(carpenter.getUserNumber());
 						user_email.add(carpenter.getUser_email());
 						
 						request.getSession().setAttribute("USER_ID", user_id.toString().replace("[", "").replace("]", ""));
@@ -464,7 +509,7 @@ public class HallsController {
 						request.getSession().setAttribute("USER_LASTNAME", user_lastname.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_NUMBER", user_number.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_EMAIL", user_email.toString().replace("[", "").replace("]", ""));
-						if (password.equals(carpenter.getUser_number())) {
+						if (password.equals(carpenter.getUserNumber())) {
 							return "redirect:/profile.jsp";
 						} else {
 						return "redirect:/carpenterUI.jsp";
@@ -475,7 +520,7 @@ public class HallsController {
 					
 			 case "security":  
 					User security = service.getUser(username, password);
-					if(security!=null && security.getUser_role().equals("security")) {
+					if(security!=null && security.getUserRole().equals("security")) {
 						
 						//Save Sessions
 						@SuppressWarnings("unchecked")
@@ -508,7 +553,7 @@ public class HallsController {
 						user_id.add(security.getUser_id());
 						user_firstname.add(security.getUser_firstname());
 						user_lastname.add(security.getUser_lastname());
-						user_number.add(security.getUser_number());
+						user_number.add(security.getUserNumber());
 						user_email.add(security.getUser_email());
 						
 						request.getSession().setAttribute("USER_ID", user_id.toString().replace("[", "").replace("]", ""));
@@ -516,7 +561,7 @@ public class HallsController {
 						request.getSession().setAttribute("USER_LASTNAME", user_lastname.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_NUMBER", user_number.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_EMAIL", user_email.toString().replace("[", "").replace("]", ""));
-						if (password.equals(security.getUser_number())) {
+						if (password.equals(security.getUserNumber())) {
 							return "redirect:/profile.jsp";
 						} else {
 						return "redirect:/securityUI.jsp";
@@ -527,7 +572,7 @@ public class HallsController {
 					
 			 case "electrician":  
 					User electrician = service.getUser(username, password);
-					if(electrician!=null && electrician.getUser_role().equals("electrician")) {
+					if(electrician!=null && electrician.getUserRole().equals("electrician")) {
 						
 						//Save Sessions
 						@SuppressWarnings("unchecked")
@@ -560,7 +605,7 @@ public class HallsController {
 						user_id.add(electrician.getUser_id());
 						user_firstname.add(electrician.getUser_firstname());
 						user_lastname.add(electrician.getUser_lastname());
-						user_number.add(electrician.getUser_number());
+						user_number.add(electrician.getUserNumber());
 						user_email.add(electrician.getUser_email());
 						
 						request.getSession().setAttribute("USER_ID", user_id.toString().replace("[", "").replace("]", ""));
@@ -568,7 +613,7 @@ public class HallsController {
 						request.getSession().setAttribute("USER_LASTNAME", user_lastname.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_NUMBER", user_number.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_EMAIL", user_email.toString().replace("[", "").replace("]", ""));
-						if (password.equals(electrician.getUser_number())) {
+						if (password.equals(electrician.getUserNumber())) {
 							return "redirect:/profile.jsp";
 						} else {
 						return "redirect:/electricianUI.jsp";
@@ -579,7 +624,7 @@ public class HallsController {
 					
 			 case "cleaner":  
 					User cleaner = service.getUser(username, password);
-					if(cleaner!=null && cleaner.getUser_role().equals("cleaner")) {
+					if(cleaner!=null && cleaner.getUserRole().equals("cleaner")) {
 						
 						//Save Sessions
 						@SuppressWarnings("unchecked")
@@ -612,7 +657,7 @@ public class HallsController {
 						user_id.add(cleaner.getUser_id());
 						user_firstname.add(cleaner.getUser_firstname());
 						user_lastname.add(cleaner.getUser_lastname());
-						user_number.add(cleaner.getUser_number());
+						user_number.add(cleaner.getUserNumber());
 						user_email.add(cleaner.getUser_email());
 						
 						request.getSession().setAttribute("USER_ID", user_id.toString().replace("[", "").replace("]", ""));
@@ -620,7 +665,7 @@ public class HallsController {
 						request.getSession().setAttribute("USER_LASTNAME", user_lastname.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_NUMBER", user_number.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_EMAIL", user_email.toString().replace("[", "").replace("]", ""));
-						if (password.equals(cleaner.getUser_number())) {
+						if (password.equals(cleaner.getUserNumber())) {
 							return "redirect:/profile.jsp";
 						} else {
 						return "redirect:/cleanerUI.jsp";
@@ -631,7 +676,7 @@ public class HallsController {
 					
 			 case "health":  
 					User health = service.getUser(username, password);
-					if(health!=null && health.getUser_role().equals("health")) {
+					if(health!=null && health.getUserRole().equals("health")) {
 						
 						//Save Sessions
 						@SuppressWarnings("unchecked")
@@ -664,7 +709,7 @@ public class HallsController {
 						user_id.add(health.getUser_id());
 						user_firstname.add(health.getUser_firstname());
 						user_lastname.add(health.getUser_lastname());
-						user_number.add(health.getUser_number());
+						user_number.add(health.getUserNumber());
 						user_email.add(health.getUser_email());
 						
 						request.getSession().setAttribute("USER_ID", user_id.toString().replace("[", "").replace("]", ""));
@@ -672,7 +717,7 @@ public class HallsController {
 						request.getSession().setAttribute("USER_LASTNAME", user_lastname.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_NUMBER", user_number.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_EMAIL", user_email.toString().replace("[", "").replace("]", ""));
-						if (password.equals(health.getUser_number())) {
+						if (password.equals(health.getUserNumber())) {
 							return "redirect:/profile.jsp";
 						} else {
 						return "redirect:/healthUI.jsp";
@@ -683,7 +728,7 @@ public class HallsController {
 					
 			 case "painter":  
 					User painter = service.getUser(username, password);
-					if(painter!=null && painter.getUser_role().equals("painter")) {
+					if(painter!=null && painter.getUserRole().equals("painter")) {
 						
 						//Save Sessions
 						@SuppressWarnings("unchecked")
@@ -716,7 +761,7 @@ public class HallsController {
 						user_id.add(painter.getUser_id());
 						user_firstname.add(painter.getUser_firstname());
 						user_lastname.add(painter.getUser_lastname());
-						user_number.add(painter.getUser_number());
+						user_number.add(painter.getUserNumber());
 						user_email.add(painter.getUser_email());
 						
 						request.getSession().setAttribute("USER_ID", user_id.toString().replace("[", "").replace("]", ""));
@@ -724,7 +769,7 @@ public class HallsController {
 						request.getSession().setAttribute("USER_LASTNAME", user_lastname.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_NUMBER", user_number.toString().replace("[", "").replace("]", ""));
 						request.getSession().setAttribute("USER_EMAIL", user_email.toString().replace("[", "").replace("]", ""));
-						if (password.equals(painter.getUser_number())) {
+						if (password.equals(painter.getUserNumber())) {
 							return "redirect:/profile.jsp";
 						} else {
 						return "redirect:/painterUI.jsp";
@@ -749,7 +794,7 @@ public class HallsController {
 			user.setUser_email(user_email);
 			user.setUser_hostel(user_hostel);
 			user.setUser_block(user_block);
-			user.setUser_room_number(Integer.parseInt(user_room_number));
+			user.setUser_room_number(user_room_number);
 			user.setPassword(password);
 
 			service.saveUser(user);
@@ -780,13 +825,13 @@ public class HallsController {
 	}
 
 	@PostMapping("/submitComplaint")
-	public String submitComplaint(@RequestParam String complaint_category, @RequestParam String complaint_content, @RequestParam int complaint_author_id,
-			@RequestParam String complaintHostel, @RequestParam String complaintBlock, @RequestParam int complaintRoomNumber){
+	public String submitComplaint(@RequestParam String complaint_category, @RequestParam String complaint_content, @RequestParam String complaint_author_id,
+			@RequestParam String complaintHostel, @RequestParam String complaintBlock, @RequestParam String complaintRoomNumber){
 		
 		Complaint complaint =new Complaint();
-		complaint.setComplaint_category(complaint_category);
+		complaint.setComplaintCategory(complaint_category);
 		complaint.setComplaint_content(complaint_content);
-		complaint.setComplaint_author_id(complaint_author_id);
+		complaint.setComplaintAuthorId(complaint_author_id);
 		complaint.setComplaintHostel(complaintHostel);
 		complaint.setComplaintBlock(complaintBlock);
 		complaint.setComplaintRoomNumber(complaintRoomNumber);
@@ -796,7 +841,7 @@ public class HallsController {
 	}
 	
 	@PostMapping("/submitReport")
-	public String submitReport(@RequestParam String report_title, @RequestParam String report_content, @RequestParam int report_author_id, @RequestParam int student_id){
+	public String submitReport(@RequestParam String report_title, @RequestParam String report_content, @RequestParam String report_author_id, @RequestParam String student_id){
 		Report report = new Report();
 		report.setStudent_id(student_id);
 		report.setReport_title(report_title);
@@ -808,12 +853,12 @@ public class HallsController {
 	}
 				
 	//approve complaint
-	@RequestMapping(value="hallsOfficerView.jsp/approve/{complaint_id}/{user_id}", method=RequestMethod.GET)
-		public String approveComplaint(@PathVariable("complaint_id") int complaintId, @PathVariable("user_id") int userID,  Map<String, Object> map) {
+	@RequestMapping(value="hallsOfficerView.jsp/approve/{complaint_id}/{user_number}", method=RequestMethod.GET)
+		public String approveComplaint(@PathVariable("complaint_id") int complaintId, @PathVariable("user_number") String userNumber,  Map<String, Object> map) {
 		
 		Complaint complaint = service.getComplaint(complaintId);
 		complaint.setComplaint_status("approved");
-		complaint.setComplaint_approved_or_rejected_by(userID);
+		complaint.setComplaint_approved_or_rejected_by(userNumber);
 		service.saveComplaint(complaint);
 		
 		return "redirect:/hallsOfficerApprovedComplaints.jsp";
@@ -822,12 +867,12 @@ public class HallsController {
 	
 	
 	//reject complaint
-	@RequestMapping(value="hallsOfficerView.jsp/reject/{complaint_id}/{user_id}", method=RequestMethod.GET)
-		public String rejectComplaint(@PathVariable("complaint_id") int complaintId, @PathVariable("user_id") int userID, Map<String, Object> map) {
+	@RequestMapping(value="hallsOfficerView.jsp/reject/{complaint_id}/{user_number}", method=RequestMethod.GET)
+		public String rejectComplaint(@PathVariable("complaint_id") int complaintId, @PathVariable("user_number") String userNumber, Map<String, Object> map) {
 		
 		Complaint complaint = service.getComplaint(complaintId);
 		complaint.setComplaint_status("rejected");
-		complaint.setComplaint_approved_or_rejected_by(userID);
+		complaint.setComplaint_approved_or_rejected_by(userNumber);
 		service.saveComplaint(complaint);
 		
 		return "redirect:/hallsOfficerRejectedComplaints.jsp";
@@ -919,7 +964,7 @@ public class HallsController {
 	
 	//Assign complaint To Worker Request
 	@PostMapping("/assignToWorker")
-	public String assignComplaintToWorker(@RequestParam int complaint_id, @RequestParam int complaint_assigned_to, @RequestParam int complaint_assigned_by){
+	public String assignComplaintToWorker(@RequestParam int complaint_id, @RequestParam String complaint_assigned_to, @RequestParam String complaint_assigned_by){
 		
 		Complaint complaint = service.getComplaint(complaint_id);
 		complaint.setComplaint_assigned_to(complaint_assigned_to);
@@ -935,23 +980,23 @@ public class HallsController {
 		public String unassignComplaint(@PathVariable("complaint_id") int complaintId, Map<String, Object> map, Model model) {
 		
 		Complaint complaint = service.getComplaint(complaintId);
-		complaint.setComplaint_assigned_to(0);
-		complaint.setComplaint_assigned_by(0);
+		complaint.setComplaint_assigned_to("none");
+		complaint.setComplaint_assigned_by("none");
 		complaint.setComplaint_status("approved");
 		service.saveComplaint(complaint);
 		
-		return "redirect:/assignedComplaints.jsp";
+		return "redirect:/custodianView.jsp";
 		
 	}
 	
 				
 	//Done complaint by Plumber	
-		@RequestMapping(value="plumberView.jsp/plumber/done/{complaint_id}/{user_id}", method=RequestMethod.GET)
-			public String doneComplaintPlumber(@PathVariable("complaint_id") int complaintId, @PathVariable("user_id") int userID, Map<String, Object> map) {
+		@RequestMapping(value="plumberView.jsp/plumber/done/{complaint_id}/{user_number}", method=RequestMethod.GET)
+			public String doneComplaintPlumber(@PathVariable("complaint_id") int complaintId, @PathVariable("user_number") String userNumber, Map<String, Object> map) {
 			
 			Complaint complaint = service.getComplaint(complaintId);
 			complaint.setComplaint_status("done");
-			complaint.setComplaint_done_by(userID);
+			complaint.setComplaint_done_by(userNumber);
 			service.saveComplaint(complaint);
 			
 			return "redirect:/plumberDoneComplaints.jsp";
@@ -959,12 +1004,12 @@ public class HallsController {
 		}
 		
 	//Done complaint by Mason
-		@RequestMapping(value="masonView.jsp/mason/done/{complaint_id}/{user_id}", method=RequestMethod.GET)
-			public String doneComplaintMason(@PathVariable("complaint_id") int complaintId, @PathVariable("user_id") int userID, Map<String, Object> map) {
+		@RequestMapping(value="masonView.jsp/mason/done/{complaint_id}/{user_number}", method=RequestMethod.GET)
+			public String doneComplaintMason(@PathVariable("complaint_id") int complaintId,@PathVariable("user_number") String userNumber, Map<String, Object> map) {
 			
 			Complaint complaint = service.getComplaint(complaintId);
 			complaint.setComplaint_status("done");
-			complaint.setComplaint_done_by(userID);
+			complaint.setComplaint_done_by(userNumber);
 			service.saveComplaint(complaint);
 			
 			return "redirect:/masonDoneComplaints.jsp";
@@ -973,12 +1018,12 @@ public class HallsController {
 		
 		
 	//Done complaint by Carpenter
-		@RequestMapping(value="carpenterView.jsp/carpenter/done/{complaint_id}/{user_id}", method=RequestMethod.GET)
-			public String doneComplaintCarpenter(@PathVariable("complaint_id") int complaintId, @PathVariable("user_id") int userID, Map<String, Object> map) {
+		@RequestMapping(value="carpenterView.jsp/carpenter/done/{complaint_id}/{user_number}", method=RequestMethod.GET)
+			public String doneComplaintCarpenter(@PathVariable("complaint_id") int complaintId, @PathVariable("user_number") String userNumber, Map<String, Object> map) {
 			
 			Complaint complaint = service.getComplaint(complaintId);
 			complaint.setComplaint_status("done");
-			complaint.setComplaint_done_by(userID);
+			complaint.setComplaint_done_by(userNumber);
 			service.saveComplaint(complaint);
 			
 			return "redirect:/carpenterDoneComplaints.jsp";
@@ -987,12 +1032,12 @@ public class HallsController {
 		
 		
 	//Done complaint by Security
-		@RequestMapping(value="securityView.jsp/security/done/{complaint_id}/{user_id}", method=RequestMethod.GET)
-			public String doneComplaintSecurity(@PathVariable("complaint_id") int complaintId, @PathVariable("user_id") int userID, Map<String, Object> map) {
+		@RequestMapping(value="securityView.jsp/security/done/{complaint_id}/{user_number}", method=RequestMethod.GET)
+			public String doneComplaintSecurity(@PathVariable("complaint_id") int complaintId, @PathVariable("user_number") String userNumber, Map<String, Object> map) {
 			
 			Complaint complaint = service.getComplaint(complaintId);
 			complaint.setComplaint_status("done");
-			complaint.setComplaint_done_by(userID);
+			complaint.setComplaint_done_by(userNumber);
 			service.saveComplaint(complaint);
 			
 			return "redirect:/securityDoneComplaints.jsp";
@@ -1000,12 +1045,12 @@ public class HallsController {
 		}
 		
 	//Done complaint by Electrician
-		@RequestMapping(value="electricianView.jsp/electrician/done/{complaint_id}/{user_id}", method=RequestMethod.GET)
-			public String doneComplaintElectrician(@PathVariable("complaint_id") int complaintId, @PathVariable("user_id") int userID, Map<String, Object> map) {
+		@RequestMapping(value="electricianView.jsp/electrician/done/{complaint_id}/{user_number}", method=RequestMethod.GET)
+			public String doneComplaintElectrician(@PathVariable("complaint_id") int complaintId,@PathVariable("user_number") String userNumber, Map<String, Object> map) {
 			
 			Complaint complaint = service.getComplaint(complaintId);
 			complaint.setComplaint_status("done");
-			complaint.setComplaint_done_by(userID);
+			complaint.setComplaint_done_by(userNumber);
 			service.saveComplaint(complaint);
 			
 			return "redirect:/electricianDoneComplaints.jsp";
@@ -1013,12 +1058,12 @@ public class HallsController {
 		}
 		
 	//Done complaint by Cleaner
-		@RequestMapping(value="cleanerView.jsp/cleaner/done/{complaint_id}/{user_id}", method=RequestMethod.GET)
-			public String doneComplaintCleaner(@PathVariable("complaint_id") int complaintId, @PathVariable("user_id") int userID, Map<String, Object> map) {
+		@RequestMapping(value="cleanerView.jsp/cleaner/done/{complaint_id}/{user_number}", method=RequestMethod.GET)
+			public String doneComplaintCleaner(@PathVariable("complaint_id") int complaintId,@PathVariable("user_number") String userNumber, Map<String, Object> map) {
 			
 			Complaint complaint = service.getComplaint(complaintId);
 			complaint.setComplaint_status("done");
-			complaint.setComplaint_done_by(userID);
+			complaint.setComplaint_done_by(userNumber);
 			service.saveComplaint(complaint);
 			
 			return "redirect:/cleanerDoneComplaints.jsp";
@@ -1026,12 +1071,12 @@ public class HallsController {
 		}
 		
 	//Done complaint by Health
-	@RequestMapping(value="healthView.jsp/health/done/{complaint_id}/{user_id}", method=RequestMethod.GET)
-		public String doneComplaintHealth(@PathVariable("complaint_id") int complaintId, @PathVariable("user_id") int userID, Map<String, Object> map) {
+	@RequestMapping(value="healthView.jsp/health/done/{complaint_id}/{user_number}", method=RequestMethod.GET)
+		public String doneComplaintHealth(@PathVariable("complaint_id") int complaintId, @PathVariable("user_number") String userNumber, Map<String, Object> map) {
 		
 		Complaint complaint = service.getComplaint(complaintId);
 		complaint.setComplaint_status("done");
-		complaint.setComplaint_done_by(userID);
+		complaint.setComplaint_done_by(userNumber);
 		service.saveComplaint(complaint);
 		
 		return "redirect:/healthDoneComplaints.jsp";
@@ -1040,12 +1085,12 @@ public class HallsController {
 	
 	
 	//Done complaint by Painter
-	@RequestMapping(value="painterView.jsp/painter/done/{complaint_id}/{user_id}", method=RequestMethod.GET)
-		public String doneComplaintPainter(@PathVariable("complaint_id") int complaintId, @PathVariable("user_id") int userID, Map<String, Object> map) {
+	@RequestMapping(value="painterView.jsp/painter/done/{complaint_id}/{user_number}", method=RequestMethod.GET)
+		public String doneComplaintPainter(@PathVariable("complaint_id") int complaintId, @PathVariable("user_number") String userNumber, Map<String, Object> map) {
 		
 		Complaint complaint = service.getComplaint(complaintId);
 		complaint.setComplaint_status("done");
-		complaint.setComplaint_done_by(userID);
+		complaint.setComplaint_done_by(userNumber);
 		service.saveComplaint(complaint);
 		
 		return "redirect:/painterDoneComplaints.jsp";
@@ -1053,12 +1098,12 @@ public class HallsController {
 	}
 	
 	//Done complaint by Custodian
-	@RequestMapping(value="custodianWorkspace.jsp/custodian/done/{complaint_id}/{user_id}", method=RequestMethod.GET)
-		public String doneComplaintCustodian(@PathVariable("complaint_id") int complaintId, @PathVariable("user_id") int userID, Map<String, Object> map) {
+	@RequestMapping(value="custodianWorkspace.jsp/custodian/done/{complaint_id}/{user_number}", method=RequestMethod.GET)
+		public String doneComplaintCustodian(@PathVariable("complaint_id") int complaintId, @PathVariable("user_number") String userNumber, Map<String, Object> map) {
 		
 		Complaint complaint = service.getComplaint(complaintId);
 		complaint.setComplaint_status("done");
-		complaint.setComplaint_done_by(userID);
+		complaint.setComplaint_done_by(userNumber);
 		service.saveComplaint(complaint);
 		
 		return "redirect:/custodianDoneComplaints.jsp";
@@ -1071,7 +1116,7 @@ public class HallsController {
 			
 			Complaint complaint = service.getComplaint(complaintId);
 			complaint.setComplaint_status("assigned");
-			complaint.setComplaint_done_by(0);
+			complaint.setComplaint_done_by("none");
 			service.saveComplaint(complaint);
 			
 			return "redirect:/plumberView.jsp";
@@ -1085,7 +1130,7 @@ public class HallsController {
 			
 			Complaint complaint = service.getComplaint(complaintId);
 			complaint.setComplaint_status("assigned");
-			complaint.setComplaint_done_by(0);
+			complaint.setComplaint_done_by("none");
 			service.saveComplaint(complaint);
 			
 			return "redirect:/masonView.jsp";
@@ -1099,7 +1144,7 @@ public class HallsController {
 			
 			Complaint complaint = service.getComplaint(complaintId);
 			complaint.setComplaint_status("assigned");
-			complaint.setComplaint_done_by(0);
+			complaint.setComplaint_done_by("none");
 			service.saveComplaint(complaint);
 			
 			return "redirect:/carpenterView.jsp";
@@ -1112,7 +1157,7 @@ public class HallsController {
 			
 			Complaint complaint = service.getComplaint(complaintId);
 			complaint.setComplaint_status("assigned");
-			complaint.setComplaint_done_by(0);
+			complaint.setComplaint_done_by("none");
 			service.saveComplaint(complaint);
 			
 			return "redirect:/securityView.jsp";
@@ -1126,7 +1171,7 @@ public class HallsController {
 			
 			Complaint complaint = service.getComplaint(complaintId);
 			complaint.setComplaint_status("assigned");
-			complaint.setComplaint_done_by(0);
+			complaint.setComplaint_done_by("none");
 			service.saveComplaint(complaint);
 			
 			return "redirect:/electricianView.jsp";
@@ -1140,7 +1185,7 @@ public class HallsController {
 			
 			Complaint complaint = service.getComplaint(complaintId);
 			complaint.setComplaint_status("assigned");
-			complaint.setComplaint_done_by(0);
+			complaint.setComplaint_done_by("none");
 			service.saveComplaint(complaint);
 			
 			return "redirect:/cleanerView.jsp";
@@ -1153,7 +1198,7 @@ public class HallsController {
 			
 			Complaint complaint = service.getComplaint(complaintId);
 			complaint.setComplaint_status("assigned");
-			complaint.setComplaint_done_by(0);
+			complaint.setComplaint_done_by("none");
 			service.saveComplaint(complaint);
 			
 			return "redirect:/healthView.jsp";
@@ -1166,7 +1211,7 @@ public class HallsController {
 			
 			Complaint complaint = service.getComplaint(complaintId);
 			complaint.setComplaint_status("assigned");
-			complaint.setComplaint_done_by(0);
+			complaint.setComplaint_done_by("none");
 			service.saveComplaint(complaint);
 			
 			return "redirect:/painterView.jsp";
@@ -1179,7 +1224,7 @@ public class HallsController {
 			
 			Complaint complaint = service.getComplaint(complaintId);
 			complaint.setComplaint_status("assigned");
-			complaint.setComplaint_done_by(0);
+			complaint.setComplaint_done_by("none");
 			service.saveComplaint(complaint);
 			
 			return "redirect:/custodianWorkspace.jsp";
@@ -1203,11 +1248,10 @@ public class HallsController {
 	}
 	
 	//Report Student
-	@RequestMapping(value="users.jsp/report/{userId}", method=RequestMethod.GET)
-	public String reportUser(@PathVariable("userId") int userId, Map<String, Object> map, Model model) {
-		model.addAttribute("userId", userId);
-		return "/reportStudentUI.jsp";
-	
+	@PostMapping("reportStudent" )
+	public String reportUser(@RequestParam String userNumber, Model model) {
+		model.addAttribute("userNumber", userNumber);
+		return "reportStudentUI.jsp";
 	}
 	
 	//delete report by Custodian
@@ -1218,7 +1262,7 @@ public class HallsController {
 	
 	}
 	
-	//delete report by Admin
+	//delete report by Admin 
 	@RequestMapping(value="/reports.jsp/admindelete/{reportId}", method=RequestMethod.GET)
 	public String deleteReportAdmin(@PathVariable("reportId") int reportId, Map<String, Object> map) {
 		service.deleteReport(reportId);;
@@ -1226,7 +1270,7 @@ public class HallsController {
 	
 	}
 	@GetMapping("/admin/AllComplaintsReport")
-	public String generateCert( HttpServletResponse response) throws JRException, IOException {
+	public void generateCert( HttpServletResponse response) throws JRException, IOException {
     	JasperPrint jasper=null;
     	
     	 jasper= service.getReport();
@@ -1246,11 +1290,10 @@ public class HallsController {
          OutputStream out = response.getOutputStream();
          
          JasperExportManager.exportReportToPdfStream(jasper, out);
-    	 
-    	 return "admin/adminUI.jsp";
     }
+	
 	@RequestMapping("/admin/complaintsReportByDate")
-	public String generateCert(@RequestParam String complaintStatus,@RequestParam String dateStart, String dateEnd, HttpServletResponse response) throws JRException, IOException {
+	public void generateCert(@RequestParam String complaintStatus,@RequestParam String complaintCategory,@RequestParam String dateStart, String dateEnd, HttpServletResponse response) throws JRException, IOException {
 		SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate=null;
         Date endDate=null;
@@ -1264,14 +1307,23 @@ public class HallsController {
                    
                 }
 		JasperPrint jasper=null;
-		if(complaintStatus.equals("all")) {jasper= service.testReport(complaintStatus,startDate, endDate);}
+		if(complaintStatus.equals("all") && complaintCategory.equals("all")) 
+		{
+			jasper= service.testReport(startDate, endDate);
+			}
     	
-		else {
-    	 jasper= service.testReport(complaintStatus,startDate, endDate);
+		else if(complaintStatus.equals("all")) {
+    	 jasper= service.testReport1(complaintCategory,startDate, endDate);
 		}
+		else if(complaintCategory.equals("all")) {
+	    	 jasper= service.testReport(complaintStatus,startDate, endDate);
+			}
+		else  {
+	    	 jasper= service.testReport(complaintStatus,complaintCategory,startDate, endDate);
+			}
     	 byte[] pdf = null;
     	 
-    	 String filename = "from"+startDate+"To"+endDate+complaintStatus+" complaints.pdf";
+    	 String filename = "from"+dateStart+"To"+dateEnd+complaintStatus+complaintCategory+"complaints.pdf";
     	 
     	 pdf = JasperExportManager.exportReportToPdf(jasper);
     	 
@@ -1285,10 +1337,9 @@ public class HallsController {
          
          JasperExportManager.exportReportToPdfStream(jasper, out);
     	 
-    	 return "admin/adminUI.jsp";
     }
-	@RequestMapping("/admin/ApprovedComplaintsReport")
-	public String generateApprovedComplaintsReport(@RequestParam String complaintStatus, HttpServletResponse response) throws JRException, IOException {
+	@RequestMapping("/admin/ComplaintsReport")
+	public void generateComplaintsReport(@RequestParam String complaintStatus, HttpServletResponse response) throws JRException, IOException {
 		
 		JasperPrint jasper=null;
     	
@@ -1310,18 +1361,17 @@ public class HallsController {
          
          JasperExportManager.exportReportToPdfStream(jasper, out);
     	 
-    	 return "admin/adminUI.jsp";
     }
-	@RequestMapping("/admin/PendingComplaintsReport")
-	public String generatePendingComplaintsReport(@RequestParam String complaintStatus, HttpServletResponse response) throws JRException, IOException {
-		
-		JasperPrint jasper=null;
+	
+	@GetMapping("/admin/AllUsersReport")
+	public void getUserReport( HttpServletResponse response) throws JRException, IOException {
+    	JasperPrint jasper=null;
     	
-    	 jasper= service.testReport(complaintStatus);
+    	 jasper= service.getuserReport();
     	 
     	 byte[] pdf = null;
     	 
-    	 String filename =complaintStatus+ " complaints.pdf";
+    	 String filename = " users.pdf";
     	 
     	 pdf = JasperExportManager.exportReportToPdf(jasper);
     	 
@@ -1335,18 +1385,17 @@ public class HallsController {
          
          JasperExportManager.exportReportToPdfStream(jasper, out);
     	 
-    	 return "admin/adminUI.jsp";
     }
-	@RequestMapping("/admin/RejectedComplaintsReport")
-	public String generateRejectedComplaintsReport(@RequestParam String complaintStatus, HttpServletResponse response) throws JRException, IOException {
+	@RequestMapping("/admin/usersReport")
+	public void generateUsersReport(@RequestParam String userRole, HttpServletResponse response) throws JRException, IOException {
 		
 		JasperPrint jasper=null;
     	
-    	 jasper= service.testReport(complaintStatus);
+    	 jasper= service.testUsersReport(userRole);
     	 
     	 byte[] pdf = null;
     	 
-    	 String filename =complaintStatus+ " complaints.pdf";
+    	 String filename =userRole+".pdf";
     	 
     	 pdf = JasperExportManager.exportReportToPdf(jasper);
     	 
@@ -1360,18 +1409,18 @@ public class HallsController {
          
          JasperExportManager.exportReportToPdfStream(jasper, out);
     	 
-    	 return "admin/adminUI.jsp";
     }
-	@RequestMapping("/admin/AssignedComplaintsReport")
-	public String generateAssignedComplaintsReport(@RequestParam String complaintStatus, HttpServletResponse response) throws JRException, IOException {
+	
+	@RequestMapping("/studentReport")
+	public void generateStudentsReport(@RequestParam String complaintAuthor, HttpServletResponse response) throws JRException, IOException {
 		
 		JasperPrint jasper=null;
     	
-    	 jasper= service.testReport(complaintStatus);
+    	 jasper= service.studentReport(complaintAuthor);
     	 
     	 byte[] pdf = null;
     	 
-    	 String filename =complaintStatus+ " complaints.pdf";
+    	 String filename =complaintAuthor+ "complaints.pdf";
     	 
     	 pdf = JasperExportManager.exportReportToPdf(jasper);
     	 
@@ -1385,35 +1434,22 @@ public class HallsController {
          
          JasperExportManager.exportReportToPdfStream(jasper, out);
     	 
-    	 return "admin/adminUI.jsp";
     }
-
-	@RequestMapping("/admin/DoneComplaintsReport")
-	public String generateDoneComplaintsReport(@RequestParam String complaintStatus, HttpServletResponse response) throws JRException, IOException {
-		
-		JasperPrint jasper=null;
-    	
-    	 jasper= service.testReport(complaintStatus);
-    	 
-    	 byte[] pdf = null;
-    	 
-    	 String filename =complaintStatus+ " complaints.pdf";
-    	 
-    	 pdf = JasperExportManager.exportReportToPdf(jasper);
-    	 
-         response.setContentType("application/pdf");
-         
-         response.setContentLength(pdf.length);
-    	 
-         response.addHeader("Content-disposition", "inline; filename=\"" + filename + "\"");
-         
-         OutputStream out = response.getOutputStream();
-         
-         JasperExportManager.exportReportToPdfStream(jasper, out);
-    	 
-    	 return "admin/adminUI.jsp";
-    }
-
-
-
+	
+	@RequestMapping(value="admin/ajaxGetHostel", method=RequestMethod.GET)
+	public @ResponseBody List<Hostel> ajaxGetHostel(@RequestParam String hostel, @RequestParam String vacancy, Map<String, Object> map) {
+		List <Hostel> hostels=service.getHostel(hostel, vacancy);
+		return hostels;
+	}
+	
+	@RequestMapping(value="admin/ajaxGetHostelAndBlock", method=RequestMethod.GET)
+	public @ResponseBody List<Hostel> ajaxGetHostel(@RequestParam String hostel, @RequestParam String block, @RequestParam String vacancy, Map<String, Object> map) {
+		List <Hostel> blocks=service.getHostel(hostel, block, vacancy);
+		return blocks;
+	}
+	@RequestMapping(value="admin/ajaxGetHostelAndBlockAndRoom", method=RequestMethod.GET)
+	public @ResponseBody List<Hostel> ajaxGetHostel(@RequestParam String hostel, @RequestParam String block, @RequestParam String room, @RequestParam String vacancy, Map<String, Object> map) {
+		List <Hostel> blocks=service.getHostel(hostel,block, room, vacancy);
+		return blocks;
+	}
 }

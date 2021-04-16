@@ -138,22 +138,6 @@
 						while(resultSet.next()){
 				%>
        <!-- About Section Content -->
-      <div class="row">
-        <div class="col-lg-4 ml-auto">
-          <p class="lead">Name</p>
-        </div>
-        <div class="col-lg-4 mr-auto">
-          <p class="lead"><%=session.getAttribute("USER_FIRSTNAME")%> <%=session.getAttribute("USER_LASTNAME")%></p>
-        </div>
-      </div>
-        <div class="row">
-        <div class="col-lg-4 ml-auto">
-          <p class="lead">Staff No</p>
-        </div>
-        <div class="col-lg-4 mr-auto">
-          <p class="lead"><%=session.getAttribute("USER_NUMBER")%> </p>
-        </div>
-      </div>
         
         <div class="row">
         <div class="col-lg-4 ml-auto">
@@ -163,14 +147,14 @@
           <p class="lead"><%=session.getAttribute("USER_EMAIL")%> </p>
         </div>
       </div>
-      <form action="/update_user" method="post">
+      <form action="/update_user" method="post" name="user_registration_form" id="user_registration_form" onsubmit="return validateForm()">
       <div class="row">
         <div class="col-lg-4 ml-auto">
           <p class="lead">Username</p>
         </div>
         <div class="col-lg-4 mr-auto">
           <div class="form-group">
-                    <input type="text" class="form-control" name="username"  minlength="5" value="<%out.println(resultSet.getString("username")); %>">
+                     <p class="lead"><%out.println(resultSet.getString("username")); %> </p>
                 </div>
         </div>
       </div>
@@ -180,7 +164,27 @@
         </div>
         <div class="col-lg-4 mr-auto">
           <div class="form-group">
-                    <input type="text" class="form-control" name="password" placeholder="Password" minlength="6" value="<%out.println(resultSet.getString("password")); %>">
+                    <input type="text" class="form-control" name="password" value="<%out.println(resultSet.getString("password")); %>">
+                </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 ml-auto">
+          <p class="lead">New Password</p>
+        </div>
+        <div class="col-lg-4 mr-auto">
+          <div class="form-group">
+                    <input type="text" class="form-control" name="newPassword" id="newPassword" placeholder="New Password" minlength="6">
+                </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 ml-auto">
+          <p class="lead">Confirm Password</p>
+        </div>
+        <div class="col-lg-4 mr-auto">
+          <div class="form-group">
+                    <input type="text" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" onkeyup='check();'> <span id='message'></span>
                 </div>
         </div>
       </div>
@@ -192,6 +196,7 @@
         <p class="lead"><button type="submit" class="btn btn-success btn-block">Update</button></p>
         </div>
       </div>
+       <input type="hidden" name="username" value="<%out.println(resultSet.getString("username")); %>">
       <input type="hidden" name="user_id" value="<%out.println(resultSet.getString("user_id")); %>">
       <input type="hidden" name="user_hostel" value="<%out.println(resultSet.getString("user_hostel")); %>">
        <input type="hidden" name="user_block" value="<%out.println(resultSet.getString("user_block")); %>">
@@ -232,7 +237,42 @@
     <a class="js-scroll-trigger d-block text-center text-white rounded" href="#page-top">
       <i class="fa fa-chevron-up"></i>
   </div>
+<script>
+function validateForm()                                    
+{ 
+    var newPassword = document.forms["user_registration_form"]["newPassword"];
+    var password = document.forms["user_registration_form"]["password"];
+    var confirmPassword = document.forms["user_registration_form"]["confirmPassword"];
+    
+   
+    if (newPassword.value == password)                        
+    { 
+        window.alert("Please update your Password."); 
+        confirmPassword.focus(); 
+        return false; 
+    } 
+    
+    if (confirmPassword.value == password)                        
+    { 
+        window.alert("Your current password does not match with your current password."); 
+        confirmPassword.focus(); 
+        return false; 
+    } 
 
+
+    return true; 
+}
+var check = function() {
+    if (document.getElementById('newPassword').value ==
+      document.getElementById('confirmPassword').value) {
+      document.getElementById('message').style.color = 'green';
+      document.getElementById('message').innerHTML = 'matching';
+    } else {
+      document.getElementById('message').style.color = 'red';
+      document.getElementById('message').innerHTML = 'not matching';
+    }
+  }
+</script>
  
   <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>

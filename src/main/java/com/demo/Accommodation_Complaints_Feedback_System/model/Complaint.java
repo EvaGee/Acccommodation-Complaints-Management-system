@@ -4,8 +4,6 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -18,11 +16,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class Complaint {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+//	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int complaint_id;
 	
 	@NotBlank 
-	private String complaint_category;
+	private String complaintCategory;
 	
 	@NotBlank
 	private String complaint_content;
@@ -37,68 +35,68 @@ public class Complaint {
 	@NotBlank
 	private String complaintBlock;
 	
-	private int complaintRoomNumber;
+	private String complaintRoomNumber;
 	
-	
-	private int complaint_approved_or_rejected_by = 0;
-	
-	private int complaint_author_id;
-	
-	private int complaint_assigned_to = 0;
-	
-	private int complaint_assigned_by = 0;
-	
-	private int complaint_done_by = 0;
+	@NotBlank
+	private String complaint_approved_or_rejected_by="none";
+	@NotBlank
+	private String complaintAuthorId;
+	@NotBlank
+	private String complaint_assigned_to="none";
+	@NotBlank
+	private String complaint_assigned_by="none";
+	@NotBlank
+	private String complaint_done_by="none";
 	
 	@CreatedDate
 	private Date createdAt;
 
 	
-	public int getComplaint_assigned_by() {
+	public String getComplaint_assigned_by() {
 		return complaint_assigned_by;
 	}
 
-	public void setComplaint_assigned_by(int complaint_assigned_by) {
+	public void setComplaint_assigned_by(String complaint_assigned_by) {
 		this.complaint_assigned_by = complaint_assigned_by;
 	}
-	public int getComplaintRoomNumber() {
+	public String getComplaintRoomNumber() {
 		return complaintRoomNumber;
 	}
 
-	public void setComplaintRoomNumber(int complaintRoomNumber) {
+	public void setComplaintRoomNumber(String complaintRoomNumber) {
 		this.complaintRoomNumber = complaintRoomNumber;
 	}
 
-	public int getComplaint_assigned_to() {
+	public String getComplaint_assigned_to() {
 		return complaint_assigned_to;
 	}
 
-	public void setComplaint_assigned_to(int complaint_assigned_to) {
+	public void setComplaint_assigned_to(String complaint_assigned_to) {
 		this.complaint_assigned_to = complaint_assigned_to;
 	}
 
-	public int getComplaint_approved_or_rejected_by() {
+	public String getComplaint_approved_or_rejected_by() {
 		return complaint_approved_or_rejected_by;
 	}
 
-	public void setComplaint_approved_or_rejected_by(int complaint_approved_or_rejected_by) {
+	public void setComplaint_approved_or_rejected_by(String complaint_approved_or_rejected_by) {
 		this.complaint_approved_or_rejected_by = complaint_approved_or_rejected_by;
 	}
 
-	public int getComplaint_done_by() {
+	public String getComplaint_done_by() {
 		return complaint_done_by;
 	}
 
-	public void setComplaint_done_by(int complaint_done_by) {
+	public void setComplaint_done_by(String complaint_done_by) {
 		this.complaint_done_by = complaint_done_by;
 	}
 
-	public String getComplaint_category() {
-		return complaint_category;
+	public String getComplaintCategory() {
+		return complaintCategory;
 	}
 
-	public void setComplaint_category(String complaint_category) {
-		this.complaint_category = complaint_category;
+	public void setComplaintCategory(String complaintCategory) {
+		this.complaintCategory = complaintCategory;
 	}
 
 	public int getComplaint_id() {
@@ -125,12 +123,12 @@ public class Complaint {
 		this.complaintStatus = complaint_status;
 	}
 
-	public int getComplaint_author_id() {
-		return complaint_author_id;
+	public String getComplaintAuthorId() {
+		return complaintAuthorId;
 	}
 
-	public void setComplaint_author_id(int complaint_author_id) {
-		this.complaint_author_id = complaint_author_id;
+	public void setComplaintAuthorId(String complaint_author_id) {
+		this.complaintAuthorId = complaint_author_id;
 	}
 	
 
@@ -168,10 +166,10 @@ public class Complaint {
 	
 	@Override
 	public String toString() {
-		return "Complaint [complaint_id=" + complaint_id + ", complaint_category=" + complaint_category
+		return "Complaint [complaint_id=" + complaint_id + ", complaint_category=" + complaintCategory
 				+ ", complaint_content=" + complaint_content + ", complaint_status=" + complaintStatus
 				+ ", complaint_approved_or_rejected_by=" + complaint_approved_or_rejected_by + ", complaint_author_id="
-				+ complaint_author_id + ", complaint_assigned_to=" + complaint_assigned_to + ", complaint_assigned_by="
+				+ complaintAuthorId + ", complaint_assigned_to=" + complaint_assigned_to + ", complaint_assigned_by="
 				+ complaint_assigned_by + ", complaint_done_by=" + complaint_done_by+","
 						+ "complaintBlock=" + complaintBlock+  ", complaintRoomNumber=" + complaintRoomNumber+"]";
 	}

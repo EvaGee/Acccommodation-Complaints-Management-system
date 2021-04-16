@@ -72,7 +72,7 @@
       <hr class="sidebar-divider my-0">
 
       <!-- Nav Item - Dashboard -->
-      <li class="nav-item active">
+      <li class="nav-item ">
         <a class="nav-link" href="custodianUI.jsp">
           <i class="fas fa-list"></i>
           <span>Dashboard</span></a>
@@ -82,7 +82,7 @@
       <hr class="sidebar-divider">
 
       <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
+      <li class="nav-item active">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-cog"></i>
           <span>Complaints</span>
@@ -93,6 +93,23 @@
             <a class="collapse-item" href="assignedComplaints.jsp">Assigned Complaints</a>
             <a class="collapse-item" href="custodianWorkspace.jsp">Workspace</a>
             <a class="collapse-item" href="custodianDoneComplaints.jsp">Done Complaints</a>
+          </div>
+        </div>
+      </li>
+
+      
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>Disciplinary</span>
+        </a>
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+          	 <a class="collapse-item" href="custodianStudents.jsp">Report students</a>
+            <a class="collapse-item" href="reports.jsp">View reported students</a>
+            
           </div>
         </div>
       </li>
@@ -152,36 +169,36 @@
                 <thead>
                  <tr>
                     
-                 <td>Complaint Category</td>
+                <td>Complaint Author: (ID)</td>
+				<td>Complaint Hostel</td>
+				<td>Complaint Block</td>
+				<td>Complaint Room number</td>
+				<td>Complaint Category</td>
 				<td>Complaint Content</td>
-				<td>Complaint Author: (ID)</td>
-				<td>Complaint Status</td>
-				<td>Complaint Assigned By: (ID)</td>
-				<td>Complaint Assigned To: (ID)</td>
-				<td>Complaint Done By: (ID)</td>
-				<td>Undo Complaint</td>
+				<td>Complaint Assigned To (ID):</td>
     		</tr>
                   
                 </thead>
                 <tbody>
                 <%
-                try{
+              
+	
+			try{
         			connection = DriverManager.getConnection(connectionUrl, userId, password);
         			statement=connection.createStatement();
-        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'done' AND complaint_category = 'custodian' AND complaint_done_by = "+ session.getAttribute("USER_ID") +" AND complaint_assigned_to = "+ session.getAttribute("USER_ID") +" ORDER BY complaint_id DESC";
+        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'done' AND complaint_assigned_by = "+ session.getAttribute("USER_NUMBER") +"  ORDER BY complaint_id DESC";
 
         			resultSet = statement.executeQuery(sql);
         			while(resultSet.next()){
         			%>
         			<tr>
-        				<td><%out.println(resultSet.getString("complaint_category")); %></td>
+        				<td><%out.println(resultSet.getString("complaint_author_id")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_hostel")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_block")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_room_number")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_category")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_author_id")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_status")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_assigned_by")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_assigned_to")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_done_by")); %></td>
-        		    	<td><a href='custodianDoneComplaints.jsp/custodian/undo/<%out.println(resultSet.getString("complaint_id")); %>'>Undo</a></td>
 
         			</tr>
 			

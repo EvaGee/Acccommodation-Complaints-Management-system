@@ -70,9 +70,18 @@
     <groupId>net.sf.jasperreports</groupId>
     <artifactId>jasperreports</artifactId>
     <version>6.16.0</version>
-</dependency>
-		
-		
+	</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

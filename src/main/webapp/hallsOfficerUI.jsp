@@ -94,6 +94,7 @@
           	 <a class="collapse-item" href="hallsOfficerView.jsp">Pending Complaints</a>
             <a class="collapse-item" href="hallsOfficerApprovedComplaints.jsp">Approved Complaints</a>
             <a class="collapse-item" href="hallsOfficerRejectedComplaints.jsp">Rejected Complaints</a>
+            <a class="collapse-item" href="hallsOfficerAssignedComplaints.jsp">Assigned Complaints</a>
             <a class="collapse-item" href="hallsOfficerDoneComplaints.jsp">Done Complaints</a>
            
           </div>

@@ -83,10 +83,17 @@
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="register_user.jsp">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
           <i class="fas fa-fw fa-cog"></i>
           <span>Register</span>
-        </a>
+          </a>
+          <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+          	<a class="collapse-item" href="registerStudent.jsp">Students</a>
+          	<a class="collapse-item" href="registerCustodian.jsp">Custodians</a>
+            <a class="collapse-item" href="register_user.jsp">Other Users</a>
+          </div>
+        </div>
       </li>
 
       
@@ -196,14 +203,13 @@
                 <thead>
                  <tr>
                     
-                   <td>User ID</td>
-				<td>Staff Number</td>
+				<td>RegNo Number</td>
 				<td>Firstname</td>
 				<td>Lastname</td>
-				<td>Username</td>
+				<td>Hostel</td>
+				<td>Block</td>
+				<td>Room Number</td>
 				<td>Email</td>
-				<td>User Role</td>
-				<td>Created At</td>
 				<td>Delete</td>
                   </tr>
                   
@@ -219,14 +225,13 @@
         			while(resultSet.next()){
         			%>
         			<tr>
-        				<td><%out.println(resultSet.getString("user_id")); %></td>
 				<td><%out.println(resultSet.getString("user_number")); %></td>
 		    	<td><%out.println(resultSet.getString("user_firstname")); %></td>
 		    	<td><%out.println(resultSet.getString("user_lastname")); %></td>
-		    	<td><%out.println(resultSet.getString("username")); %></td>
+		    	<td><%out.println(resultSet.getString("user_hostel")); %></td>
+		    	<td><%out.println(resultSet.getString("user_block")); %></td>
+		    	<td><%out.println(resultSet.getString("user_room_number")); %></td>
 		    	<td><%out.println(resultSet.getString("user_email")); %></td>
-		    	<td><%out.println(resultSet.getString("user_role")); %></td>
-		    	<td><%out.println(resultSet.getString("created_at")); %></td>
 		    	<td><a href='users.jsp/delete/<%out.println(resultSet.getString("user_id")); %>'>Delete</a></td>
         			</tr>
     				<%
@@ -236,6 +241,10 @@
     			    e.printStackTrace();
     			    }
 			%>
+			<form action="/admin/usersReport" method="post">
+     <input type="hidden" name="userRole" value="student">
+                <button type="submit" class="btn btn-success btn-block">Print</button>
+     			</form>
                 </tbody>
                 </table>
      

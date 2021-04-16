@@ -2,8 +2,6 @@ package com.demo.Accommodation_Complaints_Feedback_System.model;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -15,12 +13,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class Report {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int report_id;
 	
-	private int student_id;
+	private String student_id;
 	
-	private int report_author_id;
+	private String report_author_id;
 	
 	@NotBlank
 	private String report_title;
@@ -28,19 +25,19 @@ public class Report {
 	@NotBlank
 	private String report_content;
 
-	public int getStudent_id() {
+	public String getStudent_id() {
 		return student_id;
 	}
 
-	public void setStudent_id(int student_id) {
+	public void setStudent_id(String student_id) {
 		this.student_id = student_id;
 	}
 
-	public int getReport_author_id() {
+	public String getReport_author_id() {
 		return report_author_id;
 	}
 
-	public void setReport_author_id(int report_author_id) {
+	public void setReport_author_id(String report_author_id) {
 		this.report_author_id = report_author_id;
 	}
 

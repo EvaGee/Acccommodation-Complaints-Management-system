@@ -83,10 +83,17 @@
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="register_user.jsp">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
           <i class="fas fa-fw fa-cog"></i>
           <span>Register</span>
-        </a>
+          </a>
+          <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+          	<a class="collapse-item" href="registerStudent.jsp">Students</a>
+          	<a class="collapse-item" href="registerCustodian.jsp">Custodians</a>
+            <a class="collapse-item" href="register_user.jsp">Other Users</a>
+          </div>
+        </div>
       </li>
 
       
@@ -124,7 +131,7 @@
       <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
           <i class="fas fa-list"></i>
-          <span>Reports</span></a>
+          <span>Complaints</span></a>
           <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
           	<a class="collapse-item" href="complaints.jsp">All Complaints</a>
@@ -235,6 +242,9 @@
     			    e.printStackTrace();
     			    }
 			%>
+			<form action="/admin/usersReport" method="post">
+     <input type="hidden" name="userRole" value="security">
+                <button type="submit" class="btn btn-success btn-block">Print</button>
                 </tbody>
                 </table>
      

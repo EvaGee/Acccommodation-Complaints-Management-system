@@ -83,12 +83,18 @@
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="register_user.jsp">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
           <i class="fas fa-fw fa-cog"></i>
           <span>Register</span>
-        </a>
+          </a>
+          <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+          	<a class="collapse-item" href="registerStudent.jsp">Students</a>
+          	<a class="collapse-item" href="registerCustodian.jsp">Custodians</a>
+            <a class="collapse-item" href="register_user.jsp">Other Users</a>
+          </div>
+        </div>
       </li>
-
       
       <!-- Divider -->
       <hr class="sidebar-divider">
@@ -195,13 +201,13 @@
                 <thead>
                  <tr>
                     
-                   <td>Complaint ID</td>
+                <td>Complaint ID</td>
 				<td>Complaint Category</td>
 				<td>Complaint Content</td>
 				<td>Complaint Author: (ID)</td>
 				<td>Complaint Status</td>
 				<td>Complaint Approved/Rejected By: (ID)</td>
-				<td>Complaint Assigned To: (ID)</td>
+				<td>Complaint Assigned By: (ID)</td>
 				<td>Complaint Done By: (ID)</td>
                   </tr>
                   
@@ -223,7 +229,7 @@
         		    	<td><%out.println(resultSet.getString("complaint_author_id")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_status")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_approved_or_rejected_by")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_assigned_to")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_assigned_by")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_done_by")); %></td>
         			</tr>
  
@@ -234,11 +240,12 @@
     			    e.printStackTrace();
     			    }
 			%>
+			<tr> <a href="/admin/AllComplaintsReport">
+                <button type="submit" class="btn btn-success btn-block">Print</button>
+     			</a></tr>
                 </tbody>
                 </table>
-                 <a href="/admin/AllComplaintsReport">
-                <button type="submit" class="btn btn-success btn-block">Print</button>
-     			</a>
+                 
             </div>
     </section>
           

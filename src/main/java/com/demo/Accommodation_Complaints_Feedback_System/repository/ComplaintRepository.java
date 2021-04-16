@@ -12,10 +12,19 @@ public interface ComplaintRepository extends JpaRepository<Complaint, Integer> {
 	
 	public List<Complaint> findByComplaintStatusAndCreatedAtBetween(String complaintStatus, Date startDate, Date endDate);
 	
+	public List<Complaint> findByComplaintCategoryAndCreatedAtBetween(String complaintCategory, Date startDate, Date endDate);
+	
+	public List<Complaint> findByComplaintStatusAndComplaintCategoryAndCreatedAtBetween(String complaintStatus,String complaintCategory, Date startDate, Date endDate);
+	
 	public List<Complaint> findAllByComplaintStatus(String complaintStatus);
 	
 	public List<Complaint> findByCreatedAtBetween(Date startDate, Date endDate);
 	
+	public List<Complaint> findAllByComplaintAuthorId(String complaintAuthor);
+
+	public List<Complaint> findByComplaintHostel(String hostel);
+	
+	public List<Complaint> findByComplaintHostelAndComplaintBlock(String hostel, String block);
 	
 	
 }

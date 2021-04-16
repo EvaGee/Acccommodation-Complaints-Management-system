@@ -6,7 +6,7 @@
 <%@page import="java.sql.Connection"%>
 
     <div class="container-fluid bg">
-    <button type="button" class="btn btn-primary btn-lg" onClick="window.location.href='/custodianUI.jsp'">Back</button>
+<button type="button" class="btn btn-success btn-lg" onClick="window.location.href='/custodianView.jsp'">Back</button>
     <br>
 		<div class="container">
 				<!-- Form Start -->
@@ -42,13 +42,13 @@
 							try{
 								connection = DriverManager.getConnection(connectionUrl, userId, password);
 								statement=connection.createStatement();
-								String sql ="SELECT * FROM users WHERE user_role = 'custodian' AND  complaint_hostel = '"+ session.getAttribute("USER_HOSTEL") +"' ORDER BY user_id DESC";
+								String sql ="SELECT * FROM users WHERE user_role = 'custodian' AND  user_hostel = '"+ session.getAttribute("USER_HOSTEL") +"' ORDER BY user_id DESC";
 
 								resultSet = statement.executeQuery(sql);
 								while(resultSet.next()){
 						%>
 						
-						<option value="<%out.println(resultSet.getString("user_id")); %>"><%out.println(resultSet.getString("user_firstname")); %></option>
+						<option value="<%out.println(resultSet.getString("user_number")); %>"><%out.println(resultSet.getString("user_firstname")); %></option>
 			           <%
 					    }
 			
@@ -59,7 +59,7 @@
 		        	</select>
                 </div>
                   
-  		          <input type="hidden" id="complaint_assigned_by" name="complaint_assigned_by" value="<%=session.getAttribute("USER_ID")%>">
+  		          <input type="hidden" id="complaint_assigned_by" name="complaint_assigned_by" value="<%=session.getAttribute("USER_NUMBER")%>">
                
                   <button type="submit" class="btn btn-success btn-block">Assign</button>
             </form>

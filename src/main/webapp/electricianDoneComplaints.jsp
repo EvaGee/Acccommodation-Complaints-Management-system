@@ -116,7 +116,7 @@
             <div class="container">
 
       <!-- About Section Heading -->
-      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">View complaints</h2>
+      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Done complaints</h2>
 
       <!-- Icon Divider -->
       <div class="divider-custom ">
@@ -153,13 +153,13 @@
                 <thead>
                  <tr>
                     
-                   <td>Complaint Category</td>
+                   <td>Complaint Author: (ID)</td>
+					<td>Hostel</td>
+					<td>Block</td>
+					<td>Room Number</td>
+					<td>Complaint Category</td>
 					<td>Complaint Content</td>
-					<td>Complaint Author: (ID)</td>
-					<td>Complaint Status</td>
 					<td>Complaint Assigned By: (ID)</td>
-					<td>Complaint Assigned To: (ID)</td>
-					<td>Complaint Done By: (ID)</td>
 					<td>Undo Complaint</td>
                   </tr>
                   
@@ -169,19 +169,19 @@
                 try{
         			connection = DriverManager.getConnection(connectionUrl, userId, password);
         			statement=connection.createStatement();
-        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'done' AND complaint_category = 'electrician' AND complaint_done_by = "+ session.getAttribute("USER_ID") +" AND complaint_assigned_to = "+ session.getAttribute("USER_ID") +" ORDER BY complaint_id DESC";
+        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'done' AND complaint_category = 'electrician' AND complaint_done_by = '"+ session.getAttribute("USER_NUMBER") +"'  ORDER BY complaint_id DESC";
 
         			resultSet = statement.executeQuery(sql);
         			while(resultSet.next()){
         			%>
         			<tr>
-        				<td><%out.println(resultSet.getString("complaint_category")); %></td>
+        				<td><%out.println(resultSet.getString("complaint_author_id")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_hostel")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_block")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_room_number")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_category")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_author_id")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_status")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_assigned_by")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_assigned_to")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_done_by")); %></td>
         		    	<td><a href='electricianDoneComplaints.jsp/electrician/undo/<%out.println(resultSet.getString("complaint_id")); %>'>Undo</a></td>
         			</tr>
 

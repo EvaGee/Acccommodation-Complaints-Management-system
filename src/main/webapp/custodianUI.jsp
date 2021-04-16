@@ -103,8 +103,31 @@
       
       <!-- Divider -->
       <hr class="sidebar-divider">
+      
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>Disciplinary</span>
+        </a>
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+          	 <a class="collapse-item" href="custodianStudents.jsp">Report students</a>
+            <a class="collapse-item" href="reports.jsp">View reported students</a>
+            
+          </div>
+        </div>
+      </li>
 
       
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <li class="nav-item">
+        <a class="nav-link" href="hostelAllocation.jsp">
+          <i class="fas fa-list"></i>
+          <span>hostel</span></a>
+      </li>
         </ul> 
 
     <!-- Content Wrapper -->
@@ -152,6 +175,14 @@
         </div>
         <div class="col-lg-4 mr-auto">
           <p class="lead"><%=session.getAttribute("USER_EMAIL")%></p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 ml-auto">
+          <p class="lead">Hostel</p>
+        </div>
+        <div class="col-lg-4 mr-auto">
+          <p class="lead"><%=session.getAttribute("USER_HOSTEL")%></p>
         </div>
       </div>
         

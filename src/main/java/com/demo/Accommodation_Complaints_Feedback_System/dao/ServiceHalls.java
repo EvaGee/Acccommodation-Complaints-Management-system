@@ -23,8 +23,10 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import com.demo.Accommodation_Complaints_Feedback_System.model.Complaint;
+import com.demo.Accommodation_Complaints_Feedback_System.model.Hostel;
 import com.demo.Accommodation_Complaints_Feedback_System.model.Report;
 import com.demo.Accommodation_Complaints_Feedback_System.repository.ComplaintRepository;
+import com.demo.Accommodation_Complaints_Feedback_System.repository.HostelRepository;
 import com.demo.Accommodation_Complaints_Feedback_System.repository.ReportRepository;
 import com.demo.Accommodation_Complaints_Feedback_System.model.User;
 
@@ -42,6 +44,9 @@ public class ServiceHalls {
 	ReportRepository report_repository;
 	
 	@Autowired
+	HostelRepository hostelRepository;
+	
+	@Autowired
 	ObjectMapper objectMapper;
 	
 	public void saveReport(Report report) {
@@ -49,7 +54,12 @@ public class ServiceHalls {
 	}
 	
 	public void saveUser(User user) {
-	 	user_repository.save(user);
+		 
+	 	user_repository.save(user);	
+	}
+	
+	public User getUser(String user_number) {
+		return user_repository.findByUserNumber(user_number);
 	}
 	
 	public User getUser(String username, String password) {
@@ -60,6 +70,21 @@ public class ServiceHalls {
 		return user_repository.findById(user_id);
 	}
 	
+	public List<Hostel> getHostel(String hostel, String vacancy) {
+		return hostelRepository.findByHostelAndVacancy(hostel, vacancy);
+	}
+	
+	public List<Hostel> getHostel(String hostel,String block, String vacancy) {
+		return hostelRepository.findByHostelAndBlockAndVacancy(hostel,block, vacancy);
+	}
+	
+	public List<Hostel> getHostel(String hostel,String block, String room, String vacancy) {
+		return hostelRepository.findByHostelAndBlockAndRoomNumberAndVacancy(hostel,block,room,vacancy);
+	}
+	
+	public Hostel getHostelAndBedNo(String hostel,String block, String room, String bedNo) {
+		return hostelRepository.findByHostelAndBlockAndRoomNumberAndBedNo(hostel,block,room,bedNo);
+	}
 	
 	public void deleteUser(int user_id) {
 		user_repository.deleteById(user_id);
@@ -111,6 +136,36 @@ public class ServiceHalls {
 
     	return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 	} 
+	public JasperPrint testReport1(String complaintCategory,Date startDate, Date endDate) throws JRException, IOException {
+		List<Complaint> complaints = complaint_repository.findByComplaintCategoryAndCreatedAtBetween(complaintCategory, startDate, endDate);
+
+		// load file and compile it
+		File file = ResourceUtils.getFile("classpath:complaints.jrxml");
+
+		JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+
+		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(complaints);
+
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("createdBy", "Admin");
+
+    	return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+	} 
+	public JasperPrint testReport(String complaintStatus,String complaintCategory,Date startDate, Date endDate) throws JRException, IOException {
+		List<Complaint> complaints = complaint_repository.findByComplaintStatusAndComplaintCategoryAndCreatedAtBetween(complaintStatus,complaintCategory, startDate, endDate);
+
+		// load file and compile it
+		File file = ResourceUtils.getFile("classpath:complaints.jrxml");
+
+		JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+
+		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(complaints);
+
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("createdBy", "Admin");
+
+    	return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+	} 
 	public JasperPrint testReport(Date startDate, Date endDate) throws JRException, IOException {
 		List<Complaint> complaints = complaint_repository.findByCreatedAtBetween(startDate, endDate);
 
@@ -140,7 +195,75 @@ public class ServiceHalls {
 		parameters.put("createdBy", "Admin");
 
     	return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+	}
+
+	public JasperPrint getuserReport() throws FileNotFoundException, JRException {
+		List<User> users = user_repository.findAll();
+		
+		File file = ResourceUtils.getFile("classpath:users.jrxml");
+
+		JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+
+		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(users);
+
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("createdBy", "Admin");
+
+    	return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+	}
+
+	public JasperPrint testUsersReport(String userRole) throws FileNotFoundException, JRException {
+		List<User> users = user_repository.findAllByUserRole(userRole);
+
+		if(userRole.equals("student")) {
+		File file = ResourceUtils.getFile("classpath:users.jrxml");
+		JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(users);
+
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("createdBy", "Admin");
+
+    	return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+		}
+		else if(userRole.equals("custodian")){
+			File file = ResourceUtils.getFile("classpath:users2.jrxml");
+			JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+			JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(users);
+
+			Map<String, Object> parameters = new HashMap<>();
+			parameters.put("createdBy", "Admin");
+
+	    	return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+		}
+		else {
+			File file = ResourceUtils.getFile("classpath:users1.jrxml");
+			JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+			JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(users);
+
+			Map<String, Object> parameters = new HashMap<>();
+			parameters.put("createdBy", "Admin");
+
+	    	return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+		}
+
+		
 	} 
+	public JasperPrint studentReport(String complaintAuthor) throws JRException, IOException {
+		List<Complaint> complaints = complaint_repository.findAllByComplaintAuthorId(complaintAuthor);
+
+		// load file and compile it
+		File file = ResourceUtils.getFile("classpath:complaints.jrxml");
+
+		JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+
+		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(complaints);
+
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("createdBy", "Admin");
+
+    	return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+	}
+
 	
 	
 }

@@ -83,10 +83,17 @@
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="register_user.jsp">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
           <i class="fas fa-fw fa-cog"></i>
           <span>Register</span>
-        </a>
+          </a>
+          <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+          	<a class="collapse-item" href="registerStudent.jsp">Students</a>
+          	<a class="collapse-item" href="registerCustodian.jsp">Custodians</a>
+            <a class="collapse-item" href="register_user.jsp">Other Users</a>
+          </div>
+        </div>
       </li>
 
       
@@ -195,13 +202,14 @@
                 <thead>
                  <tr>
                     
-                   <td>Complaint ID</td>
+                <td>Complaint Author: (ID)</td>
+				<td>Complaint Hostel</td>
+				<td>Complaint Block</td>
+				<td>Complaint Room Number</td>
 				<td>Complaint Category</td>
 				<td>Complaint Content</td>
-				<td>Complaint Author: (ID)</td>
-				<td>Complaint Approved/Rejected By: (ID)</td>
-				<td>Complaint Assigned To: (ID)</td>
 				<td>Complaint Assigned By: (ID)</td>
+				<td>Complaint Assigned To: (ID)</td>
 				
 
                   </tr>
@@ -218,13 +226,14 @@
         			while(resultSet.next()){
         			%>
         			<tr>
-        				<td><%out.println(resultSet.getString("complaint_id")); %></td>
-        				<td><%out.println(resultSet.getString("complaint_category")); %></td>
+        				<td><%out.println(resultSet.getString("complaint_author_id")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_hostel")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_block")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_room_number")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_category")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_author_id")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_approved_by")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_assigned_to")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_assigned_by")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_assigned_to")); %></td>
         			</tr>
  
     				<%
@@ -234,12 +243,15 @@
     			    e.printStackTrace();
     			    }
 			%>
-                </tbody>
-                </table>
-     <form action="/admin/AssignedComplaintsReport" method="post">
+			<tr>
+			<form action="/admin/ComplaintsReport" method="post">
      <input type="hidden" name="complaintStatus" value="assigned">
                 <button type="submit" class="btn btn-success btn-block">Print</button>
      			</form>
+			 </tr>
+                </tbody>
+                </table>
+     
             </div>
     </section>
           

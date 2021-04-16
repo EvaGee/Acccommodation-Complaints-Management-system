@@ -1,7 +1,6 @@
 <%@ include file="/includes/header.jsp" %>
-<%@ include file="/includes/navigation.jsp" %>
-    <div class="container-fluid bg">
-    <button type="button" class="btn btn-primary btn-lg" onClick="window.location.href='/users.jsp'">Back</button>
+
+    <button type="button" class="btn btn-primary btn-lg" onClick="window.location.href='/custodianStudents.jsp'">Back</button>
     <br>
 		<div class="container">
 				<!-- Form Start -->
@@ -9,8 +8,8 @@
                 <br>
                 <h1>Report Student Form</h1>
                	<div class="form-group">
-                   	<label for="student_id">Student ID:</label>
-                  		<input type="number" class="form-control" value="${userId}" id="student_id" name="student_id" readonly>
+                   	<label for="student_id">Student Reg number:</label>
+                  		<input type="text" class="form-control" value="${userNumber}" id="student_id" name="student_id" readonly>
                 	 </div>
                   <div class="form-group">
                     <label for="report_title">Report Title:</label>
@@ -21,7 +20,7 @@
                     <textarea rows="5" cols="50" class="form-control" id="report_content" name="report_content" placeholder="Report Content"></textarea>
                   </div>
                   
-  		          <input type="hidden" id="report_author_id" name="report_author_id" value="<%=session.getAttribute("USER_ID")%>">
+  		          <input type="hidden" id="report_author_id" name="report_author_id" value="<%=session.getAttribute("USER_NUMBER")%>">
                
                   <button type="submit" class="btn btn-success btn-block">Submit</button>
             </form>
