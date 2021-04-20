@@ -232,7 +232,7 @@
 		    	<td><%out.println(resultSet.getString("user_block")); %></td>
 		    	<td><%out.println(resultSet.getString("user_room_number")); %></td>
 		    	<td><%out.println(resultSet.getString("user_email")); %></td>
-		    	<td><a href='users.jsp/delete/<%out.println(resultSet.getString("user_id")); %>'>Delete</a></td>
+		    	<td><a href='users.jsp/delete/<%out.println(resultSet.getString("user_id")); %>' onclick="return confirm('Are you sure you want to delete?')">Delete</a></td>
         			</tr>
     				<%
     			    }

@@ -132,7 +132,7 @@
             <div class="container">
 
       <!-- About Section Heading -->
-     <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Done complaints</h2>
+    <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Incomplete/Done complaints</h2>
 
       <!-- Icon Divider -->
       <div class="divider-custom ">
@@ -169,24 +169,23 @@
                 <thead>
                  <tr>
                     
-                <td>Complaint Author: (ID)</td>
-				<td>Complaint Hostel</td>
-				<td>Complaint Block</td>
-				<td>Complaint Room number</td>
-				<td>Complaint Category</td>
-				<td>Complaint Content</td>
-				<td>Complaint Assigned To (ID):</td>
-    		</tr>
+                   <td>Complaint Author: (ID)</td>
+					<td>Hostel</td>
+					<td>Block</td>
+					<td>Room Number</td>
+					<td>Complaint Category</td>
+					<td>Complaint Content</td>
+					<td>Complaint Status</td>
+					<td>Complaint Comment</td>
+                  </tr>
                   
                 </thead>
                 <tbody>
                 <%
-              
-	
-			try{
+                try{
         			connection = DriverManager.getConnection(connectionUrl, userId, password);
         			statement=connection.createStatement();
-        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'done' AND complaint_assigned_by = "+ session.getAttribute("USER_NUMBER") +"  ORDER BY complaint_id DESC";
+        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'done'  AND complaint_done_by = '"+ session.getAttribute("USER_NUMBER") +"'  ORDER BY complaint_id DESC";
 
         			resultSet = statement.executeQuery(sql);
         			while(resultSet.next()){
@@ -198,11 +197,38 @@
         		    	<td><%out.println(resultSet.getString("complaint_room_number")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_category")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_assigned_to")); %></td>
-
+        		    	<td><%out.println(resultSet.getString("complaint_status")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_comment")); %></td>
         			</tr>
+
+        			<% 
+			}
 			
-			<% 
+			} catch (Exception e) {
+			e.printStackTrace();
+			}
+			%>
+			 <%
+                try{
+        			connection = DriverManager.getConnection(connectionUrl, userId, password);
+        			statement=connection.createStatement();
+        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'incomplete' AND complaint_done_by = '"+ session.getAttribute("USER_NUMBER") +"'  ORDER BY complaint_id DESC";
+
+        			resultSet = statement.executeQuery(sql);
+        			while(resultSet.next()){
+        			%>
+        			<tr>
+        				<td><%out.println(resultSet.getString("complaint_author_id")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_hostel")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_block")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_room_number")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_category")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_status")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_comment")); %></td>
+        			</tr>
+
+        			<% 
 			}
 			
 			} catch (Exception e) {

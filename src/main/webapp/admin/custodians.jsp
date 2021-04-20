@@ -235,7 +235,7 @@
 		    	<td><%out.println(resultSet.getString("user_hostel")); %></td>
 		    	<td><%out.println(resultSet.getString("user_role")); %></td>
 		    	<td><%out.println(resultSet.getString("created_at")); %></td>
-		    	<td><a href='users.jsp/delete/<%out.println(resultSet.getString("user_id")); %>'>Delete</a></td>
+		    	<td><a href='users.jsp/delete/<%out.println(resultSet.getString("user_id")); %>' onclick="return confirm('Are you sure you want to delete?')">Delete</a></td>
         			</tr>
     				<%
     			    }

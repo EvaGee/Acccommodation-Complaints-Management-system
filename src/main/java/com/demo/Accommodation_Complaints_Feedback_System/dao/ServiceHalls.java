@@ -74,6 +74,10 @@ public class ServiceHalls {
 		return hostelRepository.findByHostelAndVacancy(hostel, vacancy);
 	}
 	
+	public List<Hostel> getHostel(String vacancy) {
+		return hostelRepository.findByVacancy(vacancy);
+	}
+	
 	public List<Hostel> getHostel(String hostel,String block, String vacancy) {
 		return hostelRepository.findByHostelAndBlockAndVacancy(hostel,block, vacancy);
 	}

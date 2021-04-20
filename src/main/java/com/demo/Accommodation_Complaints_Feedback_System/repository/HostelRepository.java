@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.demo.Accommodation_Complaints_Feedback_System.model.Hostel;
 
 public interface HostelRepository extends JpaRepository<Hostel, Integer>{
+	public List<Hostel> findByVacancy(String vacancy);
+	
 	public List<Hostel> findByHostelAndVacancy(String hostel, String vacancy);
 	
 	public List<Hostel> findByHostelAndBlockAndVacancy(String hostel, String block, String vacancy );

@@ -181,7 +181,7 @@
         		    	<td><%out.println(resultSet.getString("complaint_category")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_assigned_by")); %></td>
-        		    	<td><a href='healthView.jsp/health/done/<%out.println(resultSet.getString("complaint_id")); %>/<%=session.getAttribute("USER_NUMBER")%>'>Done</a></td>
+        		    	<td><a href='healthView.jsp/health/done/<%out.println(resultSet.getString("complaint_id")); %>/<%=session.getAttribute("USER_NUMBER")%>'>View details</a></td>
 
         			</tr>
         			<% 

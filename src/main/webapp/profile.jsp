@@ -164,7 +164,7 @@
         </div>
         <div class="col-lg-4 mr-auto">
           <div class="form-group">
-                    <input type="text" class="form-control" name="password" value="<%out.println(resultSet.getString("password")); %>">
+                    <input type="text" class="form-control" name="initialPassword" id="initialPassword" value="<%out.println(resultSet.getString("password")); %>">
                 </div>
         </div>
       </div>
@@ -174,7 +174,7 @@
         </div>
         <div class="col-lg-4 mr-auto">
           <div class="form-group">
-                    <input type="text" class="form-control" name="newPassword" id="newPassword" placeholder="New Password" minlength="6">
+                    <input type="password" class="form-control" name="password" id="password" placeholder="New Password" minlength="6">
                 </div>
         </div>
       </div>
@@ -184,7 +184,7 @@
         </div>
         <div class="col-lg-4 mr-auto">
           <div class="form-group">
-                    <input type="text" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" onkeyup='check();'> <span id='message'></span>
+                    <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" onkeyup='check();' required> <span id='message'></span>
                 </div>
         </div>
       </div>
@@ -240,21 +240,18 @@
 <script>
 function validateForm()                                    
 { 
-    var newPassword = document.forms["user_registration_form"]["newPassword"];
-    var password = document.forms["user_registration_form"]["password"];
-    var confirmPassword = document.forms["user_registration_form"]["confirmPassword"];
-    
-   
-    if (newPassword.value == password)                        
+	if (document.getElementById('password').value ==
+        document.getElementById('initialPassword').value)                      
     { 
-        window.alert("Please update your Password."); 
+        alert("Your new password cannot match the initial password."); 
         confirmPassword.focus(); 
         return false; 
     } 
     
-    if (confirmPassword.value == password)                        
+    if (document.getElementById('password').value !=
+        document.getElementById('confirmPassword').value)                      
     { 
-        window.alert("Your current password does not match with your current password."); 
+        alert("Your confirm password does not match with your new password."); 
         confirmPassword.focus(); 
         return false; 
     } 
@@ -263,13 +260,14 @@ function validateForm()
     return true; 
 }
 var check = function() {
-    if (document.getElementById('newPassword').value ==
+    if (document.getElementById('password').value ==
       document.getElementById('confirmPassword').value) {
       document.getElementById('message').style.color = 'green';
       document.getElementById('message').innerHTML = 'matching';
     } else {
       document.getElementById('message').style.color = 'red';
       document.getElementById('message').innerHTML = 'not matching';
+      
     }
   }
 </script>

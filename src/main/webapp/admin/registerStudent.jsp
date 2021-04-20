@@ -16,6 +16,8 @@
 	<link rel="stylesheet" type="text/css" href="css/util.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/jquery-3.5.1.js"></script>
+	<script type="text/javascript" src="js/jquery-ui.js"></script>
     </head>
 
     <body >
@@ -58,45 +60,15 @@
                           <input type="text" class="input100" name="username" id="username" placeholder="Username" required="">
                         </div>
 
-                       	<div class="login100-form">
-                       	<label for="hostel">Hostel:</label>
-                       <select class="input100" id="hostel" name="user_hostel" required>
-                        <option value="">Select Hostel </option>
-			            
-			            <%
-							String driverName = "com.mysql.cj.jdbc.Driver";
-							String connectionUrl = "jdbc:mysql://localhost:3306/accommodation_complaints_feedback_system";
-							String userId = "root";
-							String password = "";
-				
-							try {
-							Class.forName(driverName);
-							}catch (ClassNotFoundException e) {
-							e.printStackTrace();
-							}
-				
-							Connection connection = null;
-							Statement statement = null;
-							ResultSet resultSet = null;
-							
-							try{
-								connection = DriverManager.getConnection(connectionUrl, userId, password);
-								statement=connection.createStatement();
-								String sql ="SELECT * FROM hostel WHERE vacancy = 'vacant' ORDER BY id DESC";
-
-								resultSet = statement.executeQuery(sql);
-								while(resultSet.next()){
-						%>
-						
-						<option><%out.println(resultSet.getString("hostel")); %></option>
-			           <%
-					    }
-			
-					    } catch (Exception e) {
-					    e.printStackTrace();
-					    }
-						%>
-                    </select>
+                        <div class="login100-form">
+                          <label for="block">Block:</label>
+                           <select class="input100" id="hostel" name="user_block" required>
+                        	<option value="">Select Hostel </option>
+                        	
+                        	</select>
+                        </div>
+                      
+                       
                     <div class="login100-form">
                           <label for="block">Block:</label>
                            <select class="input100" id="block" name="user_block" required>
@@ -112,8 +84,6 @@
                         </div>
                        <input type="hidden" class="input100" id="bed" name="bedNo" value="" required>
 
-                        
-            </div>
             
            
                          <br>
@@ -133,6 +103,26 @@
             </div>
         </div>
 <script>
+$(document).ready(function(){
+	 $(function(){
+		 var vacancy="vacant";
+    $.ajax(
+	        {url: "ajaxGetAllHostels",
+	            type: 'GET',
+	            data:{vacancy:vacancy},
+	            success: function(data)
+	            {
+	            	 console.log(data);
+	            	var j=data.length;
+	                for (var i=0; i<j; i++){
+	                	 $("#hostel").append('<option value='+data[i].hostel+'>' +data[i].hostel+ '</option>')
+	               
+	            }
+	            }
+	        });
+	   
+	 }); 
+	});
 
   $("#hostel").change(function()
 		  {

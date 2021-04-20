@@ -117,7 +117,7 @@
             <div class="container">
 
       <!-- About Section Heading -->
-      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Done complaints</h2>
+      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">incomplete/Done complaints</h2>
 
       <!-- Icon Divider -->
       <div class="divider-custom ">
@@ -160,9 +160,9 @@
 				<td>Complaint Room Number</td>
 				<td>Complaint Category</td>
 				<td>Complaint Content</td>
-				<td>Complaint Assigned By</td>
 				<td>Complaint Done by</td>
-				<td>Created At:</td>
+				<td>Complaint status:</td>
+				<td>Complaint comment</td>
                   </tr>
                   
                 </thead>
@@ -184,9 +184,34 @@
         				<td><%out.println(resultSet.getString("complaint_room_number")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_category")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_assigned_by")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_done_by")); %></td>
-        		    	<td><%out.println(resultSet.getString("created_at")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_status")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_comment")); %></td>
+        			</tr>
+    				<%
+    			    }
+
+    			    } catch (Exception e) {
+    			    e.printStackTrace();
+    			    }
+                try{
+        			connection = DriverManager.getConnection(connectionUrl, userId, password);
+        			statement=connection.createStatement();
+        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'incomplete' AND complaint_approved_or_rejected_by = '"+ session.getAttribute("USER_NUMBER") +"' ORDER BY complaint_id DESC";
+
+        			resultSet = statement.executeQuery(sql);
+        			while(resultSet.next()){
+        			%>
+        			<tr>
+        				<td><%out.println(resultSet.getString("complaint_author_id")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_hostel")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_block")); %></td>
+        				<td><%out.println(resultSet.getString("complaint_room_number")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_category")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_done_by")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_status")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_comment")); %></td>
         			</tr>
     				<%
     			    }

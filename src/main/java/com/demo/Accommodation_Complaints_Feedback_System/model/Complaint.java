@@ -22,6 +22,11 @@ public class Complaint {
 	@NotBlank 
 	private String complaintCategory;
 	
+	@NotBlank 
+	private String complaintComment;
+	
+	
+
 	@NotBlank
 	private String complaint_content;
 	
@@ -162,6 +167,14 @@ public class Complaint {
 
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
+	}
+	
+	public String getComplaintComment() {
+		return complaintComment;
+	}
+
+	public void setComplaintComment(String complaintComment) {
+		this.complaintComment = complaintComment;
 	}
 	
 	@Override

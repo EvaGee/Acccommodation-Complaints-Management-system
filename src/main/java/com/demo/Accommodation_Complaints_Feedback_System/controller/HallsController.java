@@ -790,25 +790,17 @@ public class HallsController {
 		User user = service.getUser(user_id);
 
 		if (user_role.equals("student")) {
-			user.setUsername(username);
-			user.setUser_email(user_email);
-			user.setUser_hostel(user_hostel);
-			user.setUser_block(user_block);
-			user.setUser_room_number(user_room_number);
+			
 			user.setPassword(password);
 
 			service.saveUser(user);
 		} else if (user_role.equals("custodian")) {
-			user.setUsername(username);
-			user.setUser_email(user_email);
-			user.setUser_hostel(user_hostel);
-			user.setUser_block(user_block);
+			
 			user.setPassword(password);
 
 			service.saveUser(user);
 		} else {
-			user.setUsername(username);
-			user.setUser_email(user_email);
+			
 			user.setPassword(password);
 
 			service.saveUser(user);
@@ -992,121 +984,125 @@ public class HallsController {
 				
 	//Done complaint by Plumber	
 		@RequestMapping(value="plumberView.jsp/plumber/done/{complaint_id}/{user_number}", method=RequestMethod.GET)
-			public String doneComplaintPlumber(@PathVariable("complaint_id") int complaintId, @PathVariable("user_number") String userNumber, Map<String, Object> map) {
-			
+		public String doneComplaintP(@PathVariable("complaint_id") int complaintId, @PathVariable("user_number") String userNumber, Map<String, Object> map, Model model) {
 			Complaint complaint = service.getComplaint(complaintId);
-			complaint.setComplaint_status("done");
-			complaint.setComplaint_done_by(userNumber);
-			service.saveComplaint(complaint);
-			
-			return "redirect:/plumberDoneComplaints.jsp";
+			model.addAttribute("complaint", complaint);
+			return "/complaintDetails.jsp";
 			
 		}
 		
 	//Done complaint by Mason
 		@RequestMapping(value="masonView.jsp/mason/done/{complaint_id}/{user_number}", method=RequestMethod.GET)
-			public String doneComplaintMason(@PathVariable("complaint_id") int complaintId,@PathVariable("user_number") String userNumber, Map<String, Object> map) {
-			
+		public String doneComplaintM(@PathVariable("complaint_id") int complaintId, @PathVariable("user_number") String userNumber, Map<String, Object> map, Model model) {
 			Complaint complaint = service.getComplaint(complaintId);
-			complaint.setComplaint_status("done");
-			complaint.setComplaint_done_by(userNumber);
-			service.saveComplaint(complaint);
+			model.addAttribute("complaint", complaint);
+			return "/complaintDetails.jsp";
 			
-			return "redirect:/masonDoneComplaints.jsp";
 			
 		}
 		
 		
 	//Done complaint by Carpenter
 		@RequestMapping(value="carpenterView.jsp/carpenter/done/{complaint_id}/{user_number}", method=RequestMethod.GET)
-			public String doneComplaintCarpenter(@PathVariable("complaint_id") int complaintId, @PathVariable("user_number") String userNumber, Map<String, Object> map) {
-			
+		public String doneComplaintC(@PathVariable("complaint_id") int complaintId, @PathVariable("user_number") String userNumber, Map<String, Object> map, Model model) {
 			Complaint complaint = service.getComplaint(complaintId);
-			complaint.setComplaint_status("done");
-			complaint.setComplaint_done_by(userNumber);
-			service.saveComplaint(complaint);
-			
-			return "redirect:/carpenterDoneComplaints.jsp";
+			model.addAttribute("complaint", complaint);
+			return "/complaintDetails.jsp";
 			
 		}
 		
 		
 	//Done complaint by Security
 		@RequestMapping(value="securityView.jsp/security/done/{complaint_id}/{user_number}", method=RequestMethod.GET)
-			public String doneComplaintSecurity(@PathVariable("complaint_id") int complaintId, @PathVariable("user_number") String userNumber, Map<String, Object> map) {
-			
+		public String doneComplaintS(@PathVariable("complaint_id") int complaintId, @PathVariable("user_number") String userNumber, Map<String, Object> map, Model model) {
 			Complaint complaint = service.getComplaint(complaintId);
-			complaint.setComplaint_status("done");
-			complaint.setComplaint_done_by(userNumber);
-			service.saveComplaint(complaint);
-			
-			return "redirect:/securityDoneComplaints.jsp";
+			model.addAttribute("complaint", complaint);
+			return "/complaintDetails.jsp";
 			
 		}
 		
 	//Done complaint by Electrician
 		@RequestMapping(value="electricianView.jsp/electrician/done/{complaint_id}/{user_number}", method=RequestMethod.GET)
-			public String doneComplaintElectrician(@PathVariable("complaint_id") int complaintId,@PathVariable("user_number") String userNumber, Map<String, Object> map) {
-			
+		public String doneComplaintE(@PathVariable("complaint_id") int complaintId, @PathVariable("user_number") String userNumber, Map<String, Object> map, Model model) {
 			Complaint complaint = service.getComplaint(complaintId);
-			complaint.setComplaint_status("done");
-			complaint.setComplaint_done_by(userNumber);
-			service.saveComplaint(complaint);
-			
-			return "redirect:/electricianDoneComplaints.jsp";
+			model.addAttribute("complaint", complaint);
+			return "/complaintDetails.jsp";
 			
 		}
 		
 	//Done complaint by Cleaner
 		@RequestMapping(value="cleanerView.jsp/cleaner/done/{complaint_id}/{user_number}", method=RequestMethod.GET)
-			public String doneComplaintCleaner(@PathVariable("complaint_id") int complaintId,@PathVariable("user_number") String userNumber, Map<String, Object> map) {
-			
+		public String doneComplaintCleaner(@PathVariable("complaint_id") int complaintId, @PathVariable("user_number") String userNumber, Map<String, Object> map, Model model) {
 			Complaint complaint = service.getComplaint(complaintId);
-			complaint.setComplaint_status("done");
-			complaint.setComplaint_done_by(userNumber);
-			service.saveComplaint(complaint);
-			
-			return "redirect:/cleanerDoneComplaints.jsp";
+			model.addAttribute("complaint", complaint);
+			return "/complaintDetails.jsp";
 			
 		}
 		
 	//Done complaint by Health
 	@RequestMapping(value="healthView.jsp/health/done/{complaint_id}/{user_number}", method=RequestMethod.GET)
-		public String doneComplaintHealth(@PathVariable("complaint_id") int complaintId, @PathVariable("user_number") String userNumber, Map<String, Object> map) {
-		
+		public String doneComplaintHealth(@PathVariable("complaint_id") int complaintId, @PathVariable("user_number") String userNumber, Map<String, Object> map, Model model) {
 		Complaint complaint = service.getComplaint(complaintId);
-		complaint.setComplaint_status("done");
-		complaint.setComplaint_done_by(userNumber);
-		service.saveComplaint(complaint);
-		
-		return "redirect:/healthDoneComplaints.jsp";
+		model.addAttribute("complaint", complaint);
+		return "/complaintDetails.jsp";
 		
 	}
 	
+	@RequestMapping(value="complaintStatus", method=RequestMethod.POST)
+	public String doneComplaint(@RequestParam int complaintId, @RequestParam String userNumber,@RequestParam String complaintStatus, @RequestParam String complaintComment ) {
+	Complaint complaint = service.getComplaint(complaintId);
+	complaint.setComplaint_status(complaintStatus);
+	complaint.setComplaint_done_by(userNumber);
+	complaint.setComplaintComment(complaintComment);
+	service.saveComplaint(complaint);
+	if(complaint.getComplaintCategory().equals("health")) {
+	return "redirect:/healthDoneComplaints.jsp";
+	}
+	else if(complaint.getComplaintCategory().equals("painter")) {
+		return "redirect:/painterDoneComplaints.jsp";
+		}
+	else if(complaint.getComplaintCategory().equals("carpenter")) {
+		return "redirect:/carpenterDoneComplaints.jsp";
+		}
+	else if(complaint.getComplaintCategory().equals("mason")) {
+		return "redirect:/masonDoneComplaints.jsp";
+		}
+	else if(complaint.getComplaintCategory().equals("electrician")) {
+		return "redirect:/electricianDoneComplaints.jsp";
+		}
+	else if(complaint.getComplaintCategory().equals("cleaner")) {
+		return "redirect:/cleanerDoneComplaints.jsp";
+		}
+	else if(complaint.getComplaintCategory().equals("security")) {
+		return "redirect:/securityDoneComplaints.jsp";
+		}
+	else if(complaint.getComplaintCategory().equals("plumber")) {
+		return "redirect:/plumberDoneComplaints.jsp";
+		}
+	else if(complaint.getComplaintCategory().equals("custodian")) {
+		return "redirect:/custodianDoneComplaints.jsp";
+		}
+	else  {
+		return "redirect:/custodian DoneComplaints.jsp";
+		}
+}
 	
 	//Done complaint by Painter
 	@RequestMapping(value="painterView.jsp/painter/done/{complaint_id}/{user_number}", method=RequestMethod.GET)
-		public String doneComplaintPainter(@PathVariable("complaint_id") int complaintId, @PathVariable("user_number") String userNumber, Map<String, Object> map) {
-		
+	public String doneComplaintPainter(@PathVariable("complaint_id") int complaintId, @PathVariable("user_number") String userNumber, Map<String, Object> map, Model model) {
 		Complaint complaint = service.getComplaint(complaintId);
-		complaint.setComplaint_status("done");
-		complaint.setComplaint_done_by(userNumber);
-		service.saveComplaint(complaint);
+		model.addAttribute("complaint", complaint);
+		return "/complaintDetails.jsp";
 		
-		return "redirect:/painterDoneComplaints.jsp";
 		
 	}
 	
 	//Done complaint by Custodian
 	@RequestMapping(value="custodianWorkspace.jsp/custodian/done/{complaint_id}/{user_number}", method=RequestMethod.GET)
-		public String doneComplaintCustodian(@PathVariable("complaint_id") int complaintId, @PathVariable("user_number") String userNumber, Map<String, Object> map) {
-		
+	public String doneComplaintCustodian(@PathVariable("complaint_id") int complaintId, @PathVariable("user_number") String userNumber, Map<String, Object> map, Model model) {
 		Complaint complaint = service.getComplaint(complaintId);
-		complaint.setComplaint_status("done");
-		complaint.setComplaint_done_by(userNumber);
-		service.saveComplaint(complaint);
-		
-		return "redirect:/custodianDoneComplaints.jsp";
+		model.addAttribute("complaint", complaint);
+		return "/complaintDetails.jsp";
 		
 	}
 		
@@ -1439,6 +1435,12 @@ public class HallsController {
 	@RequestMapping(value="admin/ajaxGetHostel", method=RequestMethod.GET)
 	public @ResponseBody List<Hostel> ajaxGetHostel(@RequestParam String hostel, @RequestParam String vacancy, Map<String, Object> map) {
 		List <Hostel> hostels=service.getHostel(hostel, vacancy);
+		return hostels;
+	}
+	
+	@RequestMapping(value="admin/ajaxGetAllHostels", method=RequestMethod.GET)
+	public @ResponseBody List<Hostel> ajaxGetHostel(@RequestParam String vacancy, Map<String, Object> map) {
+		List <Hostel> hostels=service.getHostel(vacancy);
 		return hostels;
 	}
 	
