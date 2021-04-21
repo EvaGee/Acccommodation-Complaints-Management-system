@@ -100,7 +100,7 @@
       
       <!-- Divider -->
       <hr class="sidebar-divider">
-<li class="nav-item">
+<li class="nav-item active">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-folder"></i>
           <span>Users</span>
@@ -130,7 +130,7 @@
       <!-- Divider -->
       <hr class="sidebar-divider">
 
-      <li class="nav-item active">
+      <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
           <i class="fas fa-list"></i>
           <span>Complaints</span></a>
@@ -148,11 +148,12 @@
       
 <hr class="sidebar-divider">
  
-       <li class="nav-item ">
+        <li class="nav-item ">
         <a class="nav-link" href="filteredReports.jsp">
           <i class="fas fa-folder"></i>
           <span>Generate Filtered Reports</span></a>
       </li>
+      
 <hr class="sidebar-divider">
         </ul> 
 
@@ -167,7 +168,7 @@
             <div class="container">
 
       <!-- About Section Heading -->
-      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Assigned Complaints</h2>
+      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">students</h2>
 
       <!-- Icon Divider -->
       <div class="divider-custom ">
@@ -204,40 +205,37 @@
                 <thead>
                  <tr>
                     
-                <td>Complaint Author: (ID)</td>
-				<td>Complaint Hostel</td>
-				<td>Complaint Block</td>
-				<td>Complaint Room Number</td>
-				<td>Complaint Category</td>
-				<td>Complaint Content</td>
-				<td>Complaint Assigned By: (ID)</td>
-				<td>Complaint Assigned To: (ID)</td>
-				
-
+				<td>RegNo Number</td>
+				<td>Firstname</td>
+				<td>Lastname</td>
+				<td>Hostel</td>
+				<td>Block</td>
+				<td>Room Number</td>
+				<td>Email</td>
+				<td>Delete</td>
                   </tr>
                   
                 </thead>
                 <tbody>
                 <%
                 try{
-                	connection = DriverManager.getConnection(connectionUrl, userId, password);
+        			connection = DriverManager.getConnection(connectionUrl, userId, password);
         			statement=connection.createStatement();
-        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'assigned' ORDER BY complaint_id DESC";
+        			String sql ="SELECT * FROM users WHERE user_role = 'student' ORDER BY user_id DESC";
 
         			resultSet = statement.executeQuery(sql);
         			while(resultSet.next()){
         			%>
         			<tr>
-        				<td><%out.println(resultSet.getString("complaint_author_id")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_hostel")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_block")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_room_number")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_category")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_assigned_by")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_assigned_to")); %></td>
+				<td><%out.println(resultSet.getString("user_number")); %></td>
+		    	<td><%out.println(resultSet.getString("user_firstname")); %></td>
+		    	<td><%out.println(resultSet.getString("user_lastname")); %></td>
+		    	<td><%out.println(resultSet.getString("user_hostel")); %></td>
+		    	<td><%out.println(resultSet.getString("user_block")); %></td>
+		    	<td><%out.println(resultSet.getString("user_room_number")); %></td>
+		    	<td><%out.println(resultSet.getString("user_email")); %></td>
+		    	<td><a href='users.jsp/delete/<%out.println(resultSet.getString("user_id")); %>' onclick="return confirm('Are you sure you want to delete?')">Delete</a></td>
         			</tr>
- 
     				<%
     			    }
 
@@ -245,12 +243,10 @@
     			    e.printStackTrace();
     			    }
 			%>
-			<tr>
-			<form action="/admin/ComplaintsReport" method="post">
-     <input type="hidden" name="complaintStatus" value="assigned">
+			<form action="/admin/usersReport" method="post">
+     <input type="hidden" name="userRole" value="student">
                 <button type="submit" class="btn btn-success btn-block">Print</button>
      			</form>
-			 </tr>
                 </tbody>
                 </table>
      

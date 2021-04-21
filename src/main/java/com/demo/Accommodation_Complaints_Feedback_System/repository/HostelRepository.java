@@ -16,4 +16,6 @@ public interface HostelRepository extends JpaRepository<Hostel, Integer>{
 	public List<Hostel> findByHostelAndBlockAndRoomNumberAndVacancy(String hostel, String block, String room, String vacancy);
 	
 	public Hostel findByHostelAndBlockAndRoomNumberAndBedNo(String hostel, String block, String room, String bedNo);
+	
+	public List<Hostel> findByHostelAndBlockAndRoomNumber(String hostel, String block, String room);
 }

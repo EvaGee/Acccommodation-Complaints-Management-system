@@ -148,7 +148,7 @@
       
 <hr class="sidebar-divider">
  
-       <li class="nav-item ">
+        <li class="nav-item ">
         <a class="nav-link" href="filteredReports.jsp">
           <i class="fas fa-folder"></i>
           <span>Generate Filtered Reports</span></a>
@@ -167,7 +167,7 @@
             <div class="container">
 
       <!-- About Section Heading -->
-      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Assigned Complaints</h2>
+      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Approved Complaints</h2>
 
       <!-- Icon Divider -->
       <div class="divider-custom ">
@@ -204,14 +204,14 @@
                 <thead>
                  <tr>
                     
-                <td>Complaint Author: (ID)</td>
+                  <td>Complaint Author: (ID)</td>
 				<td>Complaint Hostel</td>
 				<td>Complaint Block</td>
 				<td>Complaint Room Number</td>
 				<td>Complaint Category</td>
 				<td>Complaint Content</td>
-				<td>Complaint Assigned By: (ID)</td>
-				<td>Complaint Assigned To: (ID)</td>
+				<td>Complaint Approved/Rejected By: (ID)</td>
+				
 				
 
                   </tr>
@@ -222,7 +222,7 @@
                 try{
                 	connection = DriverManager.getConnection(connectionUrl, userId, password);
         			statement=connection.createStatement();
-        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'assigned' ORDER BY complaint_id DESC";
+        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'approved' ORDER BY complaint_id DESC";
 
         			resultSet = statement.executeQuery(sql);
         			while(resultSet.next()){
@@ -234,8 +234,8 @@
         		    	<td><%out.println(resultSet.getString("complaint_room_number")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_category")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_assigned_by")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_assigned_to")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_approved_or_rejected_by")); %></td>
+        		    	
         			</tr>
  
     				<%
@@ -247,10 +247,10 @@
 			%>
 			<tr>
 			<form action="/admin/ComplaintsReport" method="post">
-     <input type="hidden" name="complaintStatus" value="assigned">
+     <input type="hidden" name="complaintStatus" value="approved">
                 <button type="submit" class="btn btn-success btn-block">Print</button>
      			</form>
-			 </tr>
+			</tr>
                 </tbody>
                 </table>
      

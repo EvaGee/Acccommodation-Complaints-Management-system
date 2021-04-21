@@ -96,7 +96,6 @@
           </div>
         </div>
       </li>
-
       
       <!-- Divider -->
       <hr class="sidebar-divider">
@@ -167,7 +166,7 @@
             <div class="container">
 
       <!-- About Section Heading -->
-      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Assigned Complaints</h2>
+      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">All Complaints</h2>
 
       <!-- Icon Divider -->
       <div class="divider-custom ">
@@ -204,16 +203,14 @@
                 <thead>
                  <tr>
                     
-                <td>Complaint Author: (ID)</td>
-				<td>Complaint Hostel</td>
-				<td>Complaint Block</td>
-				<td>Complaint Room Number</td>
+                <td>Complaint ID</td>
 				<td>Complaint Category</td>
 				<td>Complaint Content</td>
+				<td>Complaint Author: (ID)</td>
+				<td>Complaint Status</td>
+				<td>Complaint Approved/Rejected By: (ID)</td>
 				<td>Complaint Assigned By: (ID)</td>
-				<td>Complaint Assigned To: (ID)</td>
-				
-
+				<td>Complaint Done By: (ID)</td>
                   </tr>
                   
                 </thead>
@@ -222,20 +219,20 @@
                 try{
                 	connection = DriverManager.getConnection(connectionUrl, userId, password);
         			statement=connection.createStatement();
-        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'assigned' ORDER BY complaint_id DESC";
+        			String sql ="SELECT * FROM complaints ORDER BY complaint_id DESC";
 
         			resultSet = statement.executeQuery(sql);
         			while(resultSet.next()){
         			%>
         			<tr>
-        				<td><%out.println(resultSet.getString("complaint_author_id")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_hostel")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_block")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_room_number")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_category")); %></td>
+        				<td><%out.println(resultSet.getString("complaint_id")); %></td>
+        				<td><%out.println(resultSet.getString("complaint_category")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_author_id")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_status")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_approved_or_rejected_by")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_assigned_by")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_assigned_to")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_done_by")); %></td>
         			</tr>
  
     				<%
@@ -245,15 +242,12 @@
     			    e.printStackTrace();
     			    }
 			%>
-			<tr>
-			<form action="/admin/ComplaintsReport" method="post">
-     <input type="hidden" name="complaintStatus" value="assigned">
+			<tr> <a href="/admin/AllComplaintsReport">
                 <button type="submit" class="btn btn-success btn-block">Print</button>
-     			</form>
-			 </tr>
+     			</a></tr>
                 </tbody>
                 </table>
-     
+                 
             </div>
     </section>
           

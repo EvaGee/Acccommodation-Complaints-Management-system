@@ -41,7 +41,7 @@
                    	<label for="complaint_id">Complaint Comment:</label>
                   		<input type="text" class="form-control" id="complaintComment" name="complaintComment" required>
                 	 </div>
-               <input type="text" class="form-control" id="userNumber" name="userNumber" value="${complaint.complaint_assigned_to}">
+               <input type="hidden" class="form-control" id="userNumber" name="userNumber" value="${complaint.complaint_assigned_to}">
                   <button type="submit" class="btn btn-success btn-block">Submit</button>
             </form>
             <!-- Form End-->

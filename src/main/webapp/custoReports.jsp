@@ -1,4 +1,3 @@
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +10,7 @@
 
   <title>Egerton University</title>
 
-  <link rel="icon" type="image/jpg" href="images/egerlogo.jpg"/>
+  <link rel="icon" type="image/jpg" href="images/egerlogo.jpg"/>  
   <link href="css/freelancer.css" rel="stylesheet">
      <link href="css/sb-admin-2.css" rel="stylesheet">
 
@@ -33,9 +32,9 @@
   <nav class="navbar navbar-expand-lg text-uppercase bg-success" id="mainNav">
     <div class="container">
       <a class="navbar-brand js-scroll-trigger" href="#page-top">Welcome</a>
-      <a class="navbar-brand js-scroll-trigger" href="#page-top"><%=session.getAttribute("USER_FIRSTNAME")%> <%=session.getAttribute("USER_LASTNAME")%></a>
+      <a class="navbar-brand js-scroll-trigger" href="#page-top"><%=session.getAttribute("USER_FIRSTNAME")%> <%=session.getAttribute("USER_LASTNAME")%> </a>
      
-      <a class="navbar-brand js-scroll-trigger" href="#page-top"><%=session.getAttribute("USER_NUMBER")%> </a>
+      <a class="navbar-brand js-scroll-trigger" href="#page-top"> <%=session.getAttribute("USER_NUMBER")%> </a>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           
@@ -44,7 +43,7 @@
               <div class="dropdown-menu dropdown-menu-right user-dd animated">
                             <a class="dropdown-item" href="#ViewProfile"><span class="fa fa-user"></span> My Profile</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="logout"><i class="fa fa-power-off m-r-5 m-l-5"></i> Logout</a>
+                            <a class="dropdown-item" href="/logout"><i class="fa fa-power-off m-r-5 m-l-5"></i> Logout</a>
               </div>
               </a>
           </li>
@@ -62,7 +61,7 @@
   <ul class="navbar-nav bg-gradient-light sidebar  sidebar-brand" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="DoneComplaints.jsp">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="custodianUI.jsp">
         <div class="sidebar-brand-icon rotate-n-15">
           <i class="fas fa-home"></i>
         </div>
@@ -73,8 +72,8 @@
       <hr class="sidebar-divider my-0">
 
       <!-- Nav Item - Dashboard -->
-      <li class="nav-item">
-        <a class="nav-link" href="studentUI.jsp">
+      <li class="nav-item ">
+        <a class="nav-link" href="custodianUI.jsp">
           <i class="fas fa-list"></i>
           <span>Dashboard</span></a>
       </li>
@@ -84,24 +83,45 @@
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item active">
-        <a class="nav-link collapsed" href="status.jsp">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-cog"></i>
           <span>Complaints</span>
         </a>
-        
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+          	 <a class="collapse-item" href="custodianView.jsp">View Complaints</a>
+            <a class="collapse-item" href="assignedComplaints.jsp">Assigned Complaints</a>
+            <a class="collapse-item" href="custodianWorkspace.jsp">Workspace</a>
+            <a class="collapse-item" href="custodianDoneComplaints.jsp">Done Complaints</a>
+          </div>
+        </div>
       </li>
 
       
       <!-- Divider -->
       <hr class="sidebar-divider">
 
+
+ <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link" href="submitComplaint.jsp">
-          <i class="fas fa-folder"></i>
-          <span>Submit A complain</span></a>
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>Disciplinary</span>
+        </a>
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+          	 <a class="collapse-item" href="custodianStudents.jsp">Report students</a>
+            <a class="collapse-item" href="reports.jsp">View reported students</a>
+            
+          </div>
+        </div>
       </li>
+
+      
+      <!-- Divider -->
       <hr class="sidebar-divider">
 
+      
         </ul> 
 
     <!-- Content Wrapper -->
@@ -115,7 +135,7 @@
             <div class="container">
 
       <!-- About Section Heading -->
-      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Complaints status</h2>
+     <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0"><%=session.getAttribute("USER_HOSTEL")%> students</h2>
 
       <!-- Icon Divider -->
       <div class="divider-custom ">
@@ -125,7 +145,7 @@
         </div>
         <div class="divider-custom-line"></div>
       </div>
-<%@page import="java.sql.DriverManager"%>
+     <%@page import="java.sql.DriverManager"%>
 			<%@page import="java.sql.ResultSet"%>
 			<%@page import="java.sql.Statement"%>
 			<%@page import="java.sql.Connection"%>
@@ -146,60 +166,56 @@
 			Connection connection = null;
 			Statement statement = null;
 			ResultSet resultSet = null;
-			
 			%>
 
        <table class="table table-secondary container">
                 <thead>
                  <tr>
                     
-               	<td>Complaint Category</td>
-				<td>Complaint Content</td>
-				<td>Complaint Author ID</td>
-				<td>Complaint Status</td>
-				<td>Complaint Approved/Rejected By: (ID)</td>
-				<td>Complaint Assigned To: (ID)</td>
-				<td>Complaint Done By: (ID)</td>
-				<td>Comment</td>
-                  </tr>
+              <td>Report ID</td>
+				<td>Report Author: (ID)</td>
+				<td>Report Title</td>
+				<td>Report Content</td>
+				<td>Reported Student: (ID)</td>
+				<td>Delete</td>
+    		</tr>
+                  
                 </thead>
                 <tbody>
-              <%
+                <%
 			try{
 			connection = DriverManager.getConnection(connectionUrl, userId, password);
 			statement=connection.createStatement();
-			String sql ="SELECT * FROM complaints WHERE complaint_author_id = '"+session.getAttribute("USER_NUMBER")+"' ORDER BY complaint_id DESC";
+			String sql ="SELECT * FROM reports WHERE report_author_id = "+ session.getAttribute("USER_NUMBER") +" ORDER BY report_id DESC";
 
 			resultSet = statement.executeQuery(sql);
 			while(resultSet.next()){
 			%>
 			<tr>
-				<td><%out.println(resultSet.getString("complaint_category")); %></td>
-		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
-		    	<td><%out.println(resultSet.getString("complaint_author_id")); %></td>
-		    	<td><%out.println(resultSet.getString("complaint_status")); %></td>
-		    	<td><%out.println(resultSet.getString("complaint_approved_or_rejected_by")); %></td>
-		    	<td><%out.println(resultSet.getString("complaint_assigned_to")); %></td>
-		    	<td><%out.println(resultSet.getString("complaint_done_by")); %></td>
-		    	<td><%out.println(resultSet.getString("complaint_comment")); %></td>
+				<td><%out.println(resultSet.getString("report_id")); %></td>
+				<td><%out.println(resultSet.getString("report_author_id")); %></td>
+		    	<td><%out.println(resultSet.getString("report_title")); %></td>
+		    	<td><%out.println(resultSet.getString("report_content")); %></td>
+		    	<td><%out.println(resultSet.getString("student_id")); %></td>
+		    	<td><a href='reports.jsp/delete/<%out.println(resultSet.getString("report_id")); %>'>Delete</a></td>
 			</tr>
 
-			<%
-		    }
+		    
+			
+			<% 
+			}
+			
+			} catch (Exception e) {
+			e.printStackTrace();
+			}
+			%>
+			
+			</tbody>
+			</table>
+        
 
-		    } catch (Exception e) {
-		    e.printStackTrace();
-		    }
-            
-                %>
-                <tr>
-			<form action="/studentReport" method="post">
-     <input type="hidden" name="complaintAuthor" value="<%=session.getAttribute("USER_NUMBER")%>">
-                <button type="submit" class="btn btn-success btn-block">Print</button>
-     			</form>
-			</tr>
-                </tbody>
-                </table>
+     
+            </div>
     </section>
           
       </div>

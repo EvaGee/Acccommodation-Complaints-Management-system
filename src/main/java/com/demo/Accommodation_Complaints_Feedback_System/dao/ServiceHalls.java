@@ -58,6 +58,11 @@ public class ServiceHalls {
 	 	user_repository.save(user);	
 	}
 	
+	public void saveHostel(Hostel hostel) {
+		 
+	 	hostelRepository.save(hostel);	
+	}
+	
 	public User getUser(String user_number) {
 		return user_repository.findByUserNumber(user_number);
 	}
@@ -88,6 +93,10 @@ public class ServiceHalls {
 	
 	public Hostel getHostelAndBedNo(String hostel,String block, String room, String bedNo) {
 		return hostelRepository.findByHostelAndBlockAndRoomNumberAndBedNo(hostel,block,room,bedNo);
+	}
+	
+	public List<Hostel> getHostelAndBlock(String hostel,String block, String room) {
+		return hostelRepository.findByHostelAndBlockAndRoomNumber(hostel,block,room);
 	}
 	
 	public void deleteUser(int user_id) {
@@ -216,6 +225,22 @@ public class ServiceHalls {
     	return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 	}
 
+	public JasperPrint getReportedStudents() throws FileNotFoundException, JRException {
+		List<Report> reports = report_repository.findAll();
+		
+		File file = ResourceUtils.getFile("classpath:reports.jrxml");
+
+		JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+
+		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reports);
+
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("createdBy", "Admin");
+
+    	return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+	}
+
+	
 	public JasperPrint testUsersReport(String userRole) throws FileNotFoundException, JRException {
 		List<User> users = user_repository.findAllByUserRole(userRole);
 

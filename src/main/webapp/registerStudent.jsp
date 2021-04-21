@@ -61,60 +61,19 @@
                         </div>
 
                         <div class="login100-form">
-                          <label for="staffId">Hostel</label>
-                          <select class="input100" id="hostel_select" name="hostel" required>
-                          <option value="">Select Hostel</option>
-                          <option>Nairobi</option>
-	                        <option>Mombasa</option>
-	                        <option>Eldoret</option>
-	                        <option>Victoria</option>
-	                        <option>Maringo</option>
-	                        <option>Elementaita</option>
-	                        <option>Thornton</option>
-                          </select>
+                          <label for="block">Hostel:</label>
+                           <select class="input100" id="hostel" name="user_hostel" required>
+                        	<option value="">Select Hostel </option>
+                        	
+                        	</select>
                         </div>
-                        <div class="login100-form">
-                          <label for="lname">Block</label>
-                          <select class="input100" id="block_select" name="block" required>
-                          		<option value="0" hostel="Nairobi" class="hide">Select Block</option>
-                                <option value="1" hostel="Nairobi" class="hide">1</option>
-                                <option value="2" hostel="Nairobi" class="hide">2</option>
-                                <option value="3" hostel="Nairobi"class="hide">3</option>
-                                <option value="4" hostel="Nairobi" class="hide">4</option>
-                                <option value="5" hostel="Nairobi" class="hide">5</option>
-                                
-                                <option value="0" hostel="Thornton" class="hide">Select Block</option>
-                                <option value="Thornton" hostel="Thornton" class="hide">Thornton</option>
-                                
-                                <option value="0" hostel="Victoria" class="hide">Select Block</option>
-                                <option value="Victoria" hostel="Victoria" class="hide">Victoria</option>
-                                
-                                <option value="0" hostel="Elementaita" class="hide">Select Block</option>
-                                <option value="Elementaita" hostel="Elementaita" class="hide">Elementaita</option>
-                                
-                                <option value="0" hostel="Mombasa" class="hide">Select Block</option>
-                                <option value="1" hostel="Mombasa" class="hide">1</option>
-                                <option value="2" hostel="Mombasa" class="hide">2</option>
-                                <option value="3" hostel="Mombasa" class="hide">3 </option>
-                                <option value="4" hostel="Mombasa" class="hide">4</option>
-                                <option value="5" hostel="Mombasa" class="hide">5 </option>
-                                
-                                <option value="0" hostel="Eldoret" class="hide">Select Block</option>
-                                <option value="1" hostel="Eldoret" class="hide">1</option>
-                                <option value="2" hostel="Eldoret" class="hide">2</option>
-                                <option value="3" hostel="Eldoret" class="hide">3 </option>
-                                <option value="4" hostel="Eldoret" class="hide">4</option>
-                                <option value="5" hostel="Eldoret" class="hide">5 </option>
-                                
-                                <option value="0" hostel="Maringo" class="hide">Select Block</option>
-                                <option value="1" hostel="Maringo" class="hide">1</option>
-                                <option value="2" hostel="Maringo" class="hide">2</option>
-                                <option value="3" hostel="Maringo" class="hide">3 </option>
-                                <option value="4" hostel="Maringo" class="hide">4 </option>
-                                <option value="5" hostel="Maringo" class="hide">5</option>
-                                
-                         		
-                                </select>
+                      
+                       
+                    <div class="login100-form">
+                          <label for="block">Block:</label>
+                           <select class="input100" id="block" name="user_block" required>
+                        	<option value="">Select Block </option>
+                        	</select>
                         </div>
                       
                         <div class="login100-form">
@@ -144,7 +103,6 @@
             </div>
         </div>
 <script>
-<!--
 $(document).ready(function(){
 	 $(function(){
 		 var vacancy="vacant";
@@ -154,12 +112,22 @@ $(document).ready(function(){
 	            data:{vacancy:vacancy},
 	            success: function(data)
 	            {
-	            	 console.log(data);
-	            	var j=data.length;
-	                for (var i=0; i<j; i++){
-	                	 $("#hostel").append('<option value='+data[i].hostel+'>' +data[i].hostel+ '</option>')
+	            	console.log(data);
+	            	var filteredData=[];
+	            	var unique=[];
+	            	data.filter(function (data){
+	            		if (unique.indexOf(data.hostel)<0){
+	            			unique.push(data.hostel);
+	            			filteredData.push(data);
+	            		
+	            		}
+	            	});
+	            	
+	            	$.each(filteredData, function(i,item){
+	            		$("#hostel").append('<option value='+item.hostel+'>' +item.hostel+ '</option>')
+	            	});
 	               
-	            }
+	            
 	            }
 	        });
 	   
@@ -182,39 +150,29 @@ $(document).ready(function(){
             
                 console.log(hostel);
                 console.log(data);
-                var j=data.length;
-                for (var i=0; i<j; i++){
-                $("#block").append('<option value='+data[i].block+'>' +data[i].block+ '</option>')
-            }
+                var filteredData2=[];
+            	var unique2=[];
+            	data.filter(function (data){
+            		if (unique2.indexOf(data.block)<0){
+            			unique2.push(data.block);
+            			filteredData2.push(data);
+            		
+            		}
+            	});
+            	
+            	$.each(filteredData2, function(i,item){
+            		$("#block").append('<option value='+item.block+'>' +item.block+ '</option>')
+            	});
+               
             }
         });
       
  }); 
--->
-document.getElementById('hostel_select').addEventListener("change", function() {
-	  var val = this.value;
-	  var options = document.getElementById('block_select').options;
-	  var new_val = null;
-	  for (var i = 0 ; i < options.length; i++) {
-	    if (options[i].attributes["hostel"].value === val) {
-	      if (!new_val) {
-	        new_val = options[i].value;
-	      }
-	      options[i].classList.remove("hide");
-	    } else {
-	      options[i].classList.add("hide");
-	    }
-	  }
-	  document.getElementById('block_select').value = new_val;  
 
-	});
-	                    </script>
-	                    <script>
-	
 
-  $("#block_select").change(function()
+  $("#block").change(function()
 		  {
-	  var hostel=$("#hostel_select").val();   
+	  var hostel=$("#hostel").val();   
    var block=$("#block").val();
    var vacancy="vacant";
    console.log(block);
@@ -228,10 +186,20 @@ document.getElementById('hostel_select').addEventListener("change", function() {
             
                 console.log(block, hostel);
                 console.log(data);
-                var j=data.length;
-                for (var i=0; i<j; i++){
-                $("#room").append('<option value='+data[i].roomNumber+'>' +data[i].roomNumber+ '</option>')
-            }
+                var filteredData1=[];
+            	var unique1=[];
+            	data.filter(function (data){
+            		if (unique1.indexOf(data.roomNumber)<0){
+            			unique1.push(data.roomNumber);
+            			filteredData1.push(data);
+            		
+            		}
+            	});
+            	
+            	$.each(filteredData1, function(i,item){
+            		$("#room").append('<option value='+item.roomNumber+'>' +item.roomNumber+ '</option>')
+            	});
+                
             }
         });
       
@@ -239,8 +207,8 @@ document.getElementById('hostel_select').addEventListener("change", function() {
   
   $("#room").change(function()
 		  {
-	  var hostel=$("#hostel_select").val();   
-   var block=$("#block_select").val();
+	  var hostel=$("#hostel").val();   
+   var block=$("#block").val();
    var room=$("#room").val();
    var vacancy="vacant";
    console.log(vacancy);

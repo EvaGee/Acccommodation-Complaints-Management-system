@@ -123,11 +123,7 @@
       <!-- Divider -->
       <hr class="sidebar-divider">
 
-      <li class="nav-item">
-        <a class="nav-link" href="hostelAllocation.jsp">
-          <i class="fas fa-list"></i>
-          <span>hostel</span></a>
-      </li>
+      
         </ul> 
 
     <!-- Content Wrapper -->

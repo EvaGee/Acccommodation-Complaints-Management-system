@@ -101,8 +101,7 @@
       <!-- Divider -->
       <hr class="sidebar-divider">
 
-
- <!-- Nav Item - Pages Collapse Menu -->
+       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
           <i class="fas fa-fw fa-folder"></i>
@@ -120,7 +119,6 @@
       
       <!-- Divider -->
       <hr class="sidebar-divider">
-
       
         </ul> 
 
@@ -135,7 +133,9 @@
             <div class="container">
 
       <!-- About Section Heading -->
-     <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0"><%=session.getAttribute("USER_HOSTEL")%> students</h2>
+
+      <!-- About Section Heading -->
+      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">reported students</h2>
 
       <!-- Icon Divider -->
       <div class="divider-custom ">
@@ -168,11 +168,11 @@
 			ResultSet resultSet = null;
 			%>
 
-       <table class="table table-secondary container">
+      <table class="table table-secondary container">
                 <thead>
                  <tr>
                     
-              <td>Report ID</td>
+				 <td>Report ID</td>
 				<td>Report Author: (ID)</td>
 				<td>Report Title</td>
 				<td>Report Content</td>
@@ -186,7 +186,7 @@
 			try{
 			connection = DriverManager.getConnection(connectionUrl, userId, password);
 			statement=connection.createStatement();
-			String sql ="SELECT * FROM reports WHERE report_author_id = "+ session.getAttribute("USER_NUMBER") +" ORDER BY report_id DESC";
+			String sql ="SELECT * FROM reports WHERE report_author_id="+ session.getAttribute("USER_NUMBER") +" ORDER BY report_id DESC";
 
 			resultSet = statement.executeQuery(sql);
 			while(resultSet.next()){
@@ -197,23 +197,20 @@
 		    	<td><%out.println(resultSet.getString("report_title")); %></td>
 		    	<td><%out.println(resultSet.getString("report_content")); %></td>
 		    	<td><%out.println(resultSet.getString("student_id")); %></td>
-		    	<td><a href='reports.jsp/delete/<%out.println(resultSet.getString("report_id")); %>'>Delete</a></td>
-			</tr>
+		    	<td><a href='reports.jsp/delete/<%out.println(resultSet.getString("report_id")); %>' onclick="return confirm('Are you sure you want to delete?')">Delete</a></td>
+        			</tr>
+    				<%
+    			    }
 
-		    
-			
-			<% 
-			}
-			
-			} catch (Exception e) {
-			e.printStackTrace();
-			}
+    			    } catch (Exception e) {
+    			    e.printStackTrace();
+    			    }
 			%>
-			
-			</tbody>
-			</table>
-        
-
+			<form action="reportedStudents" method="get">
+                <button type="submit" class="btn btn-success btn-block">Print</button>
+     			</form>
+                </tbody>
+                </table>
      
             </div>
     </section>

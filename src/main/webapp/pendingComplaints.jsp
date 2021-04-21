@@ -148,7 +148,7 @@
       
 <hr class="sidebar-divider">
  
-       <li class="nav-item ">
+      <li class="nav-item ">
         <a class="nav-link" href="filteredReports.jsp">
           <i class="fas fa-folder"></i>
           <span>Generate Filtered Reports</span></a>
@@ -167,7 +167,7 @@
             <div class="container">
 
       <!-- About Section Heading -->
-      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Assigned Complaints</h2>
+      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Pending Complaints</h2>
 
       <!-- Icon Divider -->
       <div class="divider-custom ">
@@ -210,8 +210,8 @@
 				<td>Complaint Room Number</td>
 				<td>Complaint Category</td>
 				<td>Complaint Content</td>
-				<td>Complaint Assigned By: (ID)</td>
-				<td>Complaint Assigned To: (ID)</td>
+				<td>Created At</td>
+				
 				
 
                   </tr>
@@ -222,7 +222,7 @@
                 try{
                 	connection = DriverManager.getConnection(connectionUrl, userId, password);
         			statement=connection.createStatement();
-        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'assigned' ORDER BY complaint_id DESC";
+        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'pending' ORDER BY complaint_id DESC";
 
         			resultSet = statement.executeQuery(sql);
         			while(resultSet.next()){
@@ -234,10 +234,9 @@
         		    	<td><%out.println(resultSet.getString("complaint_room_number")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_category")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_assigned_by")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_assigned_to")); %></td>
+        		    	<td><%out.println(resultSet.getString("created_At")); %></td>
+        		    	
         			</tr>
- 
     				<%
     			    }
 
@@ -246,14 +245,14 @@
     			    }
 			%>
 			<tr>
-			<form action="/admin/ComplaintsReport" method="post">
-     <input type="hidden" name="complaintStatus" value="assigned">
+			 <form action="/admin/ComplaintsReport" method="post">
+     <input type="hidden" name="complaintStatus" value="pending">
                 <button type="submit" class="btn btn-success btn-block">Print</button>
      			</form>
-			 </tr>
+			</tr>
                 </tbody>
                 </table>
-     
+    
             </div>
     </section>
           

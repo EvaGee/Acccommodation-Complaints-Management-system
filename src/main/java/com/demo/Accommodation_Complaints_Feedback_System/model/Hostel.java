@@ -2,6 +2,8 @@ package com.demo.Accommodation_Complaints_Feedback_System.model;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -14,7 +16,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class Hostel {
 
 	@Id
-//	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 	
 	@NotBlank

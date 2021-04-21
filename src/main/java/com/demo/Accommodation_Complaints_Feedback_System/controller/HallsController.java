@@ -82,37 +82,37 @@ public class HallsController {
 			Hostel hostel=service.getHostelAndBedNo(user_hostel, user_block, user_room_number, bedNo);
 			
 			hostel.setVacancy(user_number);
-			return "redirect:admin/registerStudent.jsp";	
+			return "registerStudent.jsp";	
 		}
 		else if(user.getUserRole().equals("custodian")) {
-			return "redirect:admin/registerCustodian.jsp";	
+			return "registerCustodian.jsp";	
 		}
 		else{
-			return "redirect:admin/register_user.jsp";	
+			return "register_user.jsp";	
 		}
 		}
 		else if(user1!=null && user1.getUserRole().equals("student")) {
 			String message1="Registration unsuccessful, Student already registered";
 			model.addAttribute("message", message1);
-			return "redirect:admin/registerStudent.jsp";	
+			return "registerStudent.jsp";	
 		}
 		else if(user1!=null && user1.getUserRole().equals("custodian")) {
 			String message1="Registration unsuccessful,Staff already registered, try again";
 			model.addAttribute("message", message1);
-			return "redirect:admin/registerCustodian.jsp";	
+			return "registerCustodian.jsp";	
 		}
 		else
 		{	
 			String message1="Registration unsuccessful,Staff already registered, try again";
 			model.addAttribute("message", message1);
-			return "redirect:admin/register_user.jsp";	
+			return "register_user.jsp";	
 		}
 		
 		
 	}
 	
 	//delete user
-	@RequestMapping(value="admin/users.jsp/delete/{userId}", method=RequestMethod.GET)
+	@RequestMapping(value="/users.jsp/delete/{userId}", method=RequestMethod.GET)
 	public String delete(@PathVariable("userId") int userId, Map<String, Object> map) {
 		service.deleteUser(userId);
 		return "redirect:/admin/users.jsp";
@@ -168,9 +168,9 @@ public class HallsController {
 					request.getSession().setAttribute("USER_NUMBER", user_number.toString().replace("[", "").replace("]", ""));
 					request.getSession().setAttribute("USER_EMAIL", user_email.toString().replace("[", "").replace("]", ""));
 					if (password.equals(admin.getUserNumber())) {
-						return "redirect:/admin/profile.jsp";
+						return "redirect:/profile.jsp";
 					} else {	
-					return "redirect:/admin/adminUI.jsp";
+					return "redirect:/adminUI.jsp";
 					}
 				} else {
 					return "redirect:/login.jsp";
@@ -1382,6 +1382,30 @@ public class HallsController {
          JasperExportManager.exportReportToPdfStream(jasper, out);
     	 
     }
+	
+	@GetMapping("reportedStudents")
+	public void getReport( HttpServletResponse response) throws JRException, IOException {
+    	JasperPrint jasper=null;
+    	
+    	 jasper= service.getReportedStudents();
+    	 
+    	 byte[] pdf = null;
+    	 
+    	 String filename = " reportedStudents.pdf";
+    	 
+    	 pdf = JasperExportManager.exportReportToPdf(jasper);
+    	 
+         response.setContentType("application/pdf");
+         
+         response.setContentLength(pdf.length);
+    	 
+         response.addHeader("Content-disposition", "inline; filename=\"" + filename + "\"");
+         
+         OutputStream out = response.getOutputStream();
+         
+         JasperExportManager.exportReportToPdfStream(jasper, out);
+    	 
+    }
 	@RequestMapping("/admin/usersReport")
 	public void generateUsersReport(@RequestParam String userRole, HttpServletResponse response) throws JRException, IOException {
 		
@@ -1432,26 +1456,143 @@ public class HallsController {
     	 
     }
 	
-	@RequestMapping(value="admin/ajaxGetHostel", method=RequestMethod.GET)
+	@RequestMapping(value="ajaxGetHostel", method=RequestMethod.GET)
 	public @ResponseBody List<Hostel> ajaxGetHostel(@RequestParam String hostel, @RequestParam String vacancy, Map<String, Object> map) {
 		List <Hostel> hostels=service.getHostel(hostel, vacancy);
 		return hostels;
 	}
 	
-	@RequestMapping(value="admin/ajaxGetAllHostels", method=RequestMethod.GET)
+	@RequestMapping(value="ajaxGetAllHostels", method=RequestMethod.GET)
 	public @ResponseBody List<Hostel> ajaxGetHostel(@RequestParam String vacancy, Map<String, Object> map) {
 		List <Hostel> hostels=service.getHostel(vacancy);
 		return hostels;
 	}
 	
-	@RequestMapping(value="admin/ajaxGetHostelAndBlock", method=RequestMethod.GET)
+	@RequestMapping(value="ajaxGetHostelAndBlock", method=RequestMethod.GET)
 	public @ResponseBody List<Hostel> ajaxGetHostel(@RequestParam String hostel, @RequestParam String block, @RequestParam String vacancy, Map<String, Object> map) {
 		List <Hostel> blocks=service.getHostel(hostel, block, vacancy);
 		return blocks;
 	}
-	@RequestMapping(value="admin/ajaxGetHostelAndBlockAndRoom", method=RequestMethod.GET)
+	@RequestMapping(value="ajaxGetHostelAndBlockAndRoom", method=RequestMethod.GET)
 	public @ResponseBody List<Hostel> ajaxGetHostel(@RequestParam String hostel, @RequestParam String block, @RequestParam String room, @RequestParam String vacancy, Map<String, Object> map) {
 		List <Hostel> blocks=service.getHostel(hostel,block, room, vacancy);
 		return blocks;
 	}
+	@PostMapping("/registerHostel")
+	public String addHostel(@RequestParam String hostel, @RequestParam String block, @RequestParam String room, 
+			@RequestParam String bedNo,Model model) {
+		List<Hostel> hostels=service.getHostelAndBlock(hostel, block, room);
+		if(hostels!=null) {
+			String message="hostel, block and room already registered";
+			model.addAttribute("message", message);
+			return "registerHostel.jsp";
+		}
+		else {
+			
+			if(bedNo.equals("1")) {
+				Hostel hostel1=new Hostel();
+				hostel1.setBedNo("1");
+				hostel1.setHostel(hostel);
+				hostel1.setBlock(block);
+				hostel1.setRoomNumber(room);
+				service.saveHostel(hostel1);
+			}
+			if(bedNo.equals("2")) {
+				Hostel hostel1=new Hostel();
+				hostel1.setBedNo("1");
+				hostel1.setHostel(hostel);
+				hostel1.setBlock(block);
+				hostel1.setRoomNumber(room);
+				service.saveHostel(hostel1);
+	
+				Hostel hostel2=new Hostel();
+				hostel2.setBedNo("2");
+				hostel2.setHostel(hostel);
+				hostel2.setBlock(block);
+				hostel2.setRoomNumber(room);
+				service.saveHostel(hostel2);			
+			}
+			
+			if(bedNo.equals("4")) {
+				Hostel hostel1=new Hostel();
+				hostel1.setBedNo("1");
+				hostel1.setHostel(hostel);
+				hostel1.setBlock(block);
+				hostel1.setRoomNumber(room);
+				service.saveHostel(hostel1);
+				
+				Hostel hostel2=new Hostel();
+				hostel2.setBedNo("2");
+				hostel2.setHostel(hostel);
+				hostel2.setBlock(block);
+				hostel2.setRoomNumber(room);
+				service.saveHostel(hostel2);	
+				
+				Hostel hostel3=new Hostel();
+				hostel3.setBedNo("3");
+				hostel3.setHostel(hostel);
+				hostel3.setBlock(block);
+				hostel3.setRoomNumber(room);
+				service.saveHostel(hostel3);	
+				
+				Hostel hostel4=new Hostel();
+				hostel4.setBedNo("3");
+				hostel4.setHostel(hostel);
+				hostel4.setBlock(block);
+				hostel4.setRoomNumber(room);
+				service.saveHostel(hostel4);	
+			}
+			
+			if(bedNo.equals("6")) {
+				Hostel hostel1=new Hostel();
+				hostel1.setBedNo("1");
+				hostel1.setHostel(hostel);
+				hostel1.setBlock(block);
+				hostel1.setRoomNumber(room);
+				service.saveHostel(hostel1);
+				
+				Hostel hostel2=new Hostel();
+				hostel2.setBedNo("2");
+				hostel2.setHostel(hostel);
+				hostel2.setBlock(block);
+				hostel2.setRoomNumber(room);
+				service.saveHostel(hostel2);	
+				
+				Hostel hostel3=new Hostel();
+				hostel3.setBedNo("3");
+				hostel3.setHostel(hostel);
+				hostel3.setBlock(block);
+				hostel3.setRoomNumber(room);
+				service.saveHostel(hostel3);	
+				
+				Hostel hostel4=new Hostel();
+				hostel4.setBedNo("3");
+				hostel4.setHostel(hostel);
+				hostel4.setBlock(block);
+				hostel4.setRoomNumber(room);
+				service.saveHostel(hostel4);
+				
+				Hostel hostel5=new Hostel();
+				hostel5.setBedNo("3");
+				hostel5.setHostel(hostel);
+				hostel5.setBlock(block);
+				hostel5.setRoomNumber(room);
+				service.saveHostel(hostel5);	
+				
+				Hostel hostel6=new Hostel();
+				hostel6.setBedNo("3");
+				hostel6.setHostel(hostel);
+				hostel6.setBlock(block);
+				hostel6.setRoomNumber(room);
+				service.saveHostel(hostel6);
+			}
+			
+			
+			String message="Successfully registered!";
+			model.addAttribute("message", message);
+			return "registerHostel.jsp";
+		}
+		
+	}
+	
 }

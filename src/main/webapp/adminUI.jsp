@@ -72,7 +72,7 @@
       <hr class="sidebar-divider my-0">
 
       <!-- Nav Item - Dashboard -->
-       <li class="nav-item">
+       <li class="nav-item active">
         <a class="nav-link" href="adminUI.jsp">
           <i class="fas fa-list"></i>
           <span>Dashboard</span></a>
@@ -92,7 +92,7 @@
           	<a class="collapse-item" href="registerStudent.jsp">Students</a>
           	<a class="collapse-item" href="registerCustodian.jsp">Custodians</a>
             <a class="collapse-item" href="register_user.jsp">Other Users</a>
-          	<a class="collapse-item" href="registerHostel.jsp">Hostels</a>
+            <a class="collapse-item" href="registerHostel.jsp">Hostels</a>
           </div>
         </div>
       </li>
@@ -130,7 +130,7 @@
       <!-- Divider -->
       <hr class="sidebar-divider">
 
-      <li class="nav-item active">
+      <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
           <i class="fas fa-list"></i>
           <span>Complaints</span></a>
@@ -153,7 +153,9 @@
           <i class="fas fa-folder"></i>
           <span>Generate Filtered Reports</span></a>
       </li>
-<hr class="sidebar-divider">
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
         </ul> 
 
     <!-- Content Wrapper -->
@@ -167,7 +169,7 @@
             <div class="container">
 
       <!-- About Section Heading -->
-      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Assigned Complaints</h2>
+      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Your Profile</h2>
 
       <!-- Icon Divider -->
       <div class="divider-custom ">
@@ -177,82 +179,35 @@
         </div>
         <div class="divider-custom-line"></div>
       </div>
-     <%@page import="java.sql.DriverManager"%>
-			<%@page import="java.sql.ResultSet"%>
-			<%@page import="java.sql.Statement"%>
-			<%@page import="java.sql.Connection"%>
 
-			<%
+       <!-- About Section Content -->
+      <div class="row">
+        <div class="col-lg-4 ml-auto">
+          <p class="lead">Name</p>
+        </div>
+        <div class="col-lg-4 mr-auto">
+          <p class="lead"><%=session.getAttribute("USER_FIRSTNAME")%> <%=session.getAttribute("USER_LASTNAME")%></p>
+        </div>
+      </div>
+        <div class="row">
+        <div class="col-lg-4 ml-auto">
+          <p class="lead">Staff No</p>
+        </div>
+        <div class="col-lg-4 mr-auto">
+          <p class="lead"><%=session.getAttribute("USER_NUMBER")%> </p>
+        </div>
+      </div>
+        
+        <div class="row">
+        <div class="col-lg-4 ml-auto">
+          <p class="lead">Email</p>
+        </div>
+        <div class="col-lg-4 mr-auto">
+          <p class="lead"><%=session.getAttribute("USER_EMAIL")%> </p>
+        </div>
+      </div>
+        
 
-			String driverName = "com.mysql.cj.jdbc.Driver";
-			String connectionUrl = "jdbc:mysql://localhost:3306/accommodation_complaints_feedback_system";
-			String userId = "root";
-			String password = "";
-
-			try {
-			Class.forName(driverName);
-			}catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			}
-
-			Connection connection = null;
-			Statement statement = null;
-			ResultSet resultSet = null;
-			%>
-
-      <table class="table table-secondary container">
-                <thead>
-                 <tr>
-                    
-                <td>Complaint Author: (ID)</td>
-				<td>Complaint Hostel</td>
-				<td>Complaint Block</td>
-				<td>Complaint Room Number</td>
-				<td>Complaint Category</td>
-				<td>Complaint Content</td>
-				<td>Complaint Assigned By: (ID)</td>
-				<td>Complaint Assigned To: (ID)</td>
-				
-
-                  </tr>
-                  
-                </thead>
-                <tbody>
-                <%
-                try{
-                	connection = DriverManager.getConnection(connectionUrl, userId, password);
-        			statement=connection.createStatement();
-        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'assigned' ORDER BY complaint_id DESC";
-
-        			resultSet = statement.executeQuery(sql);
-        			while(resultSet.next()){
-        			%>
-        			<tr>
-        				<td><%out.println(resultSet.getString("complaint_author_id")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_hostel")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_block")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_room_number")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_category")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_assigned_by")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_assigned_to")); %></td>
-        			</tr>
- 
-    				<%
-    			    }
-
-    			    } catch (Exception e) {
-    			    e.printStackTrace();
-    			    }
-			%>
-			<tr>
-			<form action="/admin/ComplaintsReport" method="post">
-     <input type="hidden" name="complaintStatus" value="assigned">
-                <button type="submit" class="btn btn-success btn-block">Print</button>
-     			</form>
-			 </tr>
-                </tbody>
-                </table>
      
             </div>
     </section>

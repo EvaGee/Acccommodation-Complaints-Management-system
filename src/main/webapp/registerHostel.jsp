@@ -33,18 +33,22 @@
 	<div class="limiter">
             <div class="container-login100" style="background-image: url('images/gate1.jpg');">
 		<div class="wrap-login100">
-                    <form class="login100-form validate-form" method="post" action="/registerUser" name="login_form" id="login_form">
-                       
+                    <form class="login100-form validate-form" method="post" action="/registerHostel" name="login_form" id="login_form" onsubmit="return validateForm()">
+                       <span class="login100-form-logo">
+                            <img src='images/egerlogo.jpg' alt='logo' width="200%" height="100%">
+                        </span>
                         <span class="login100-form-title p-b-34 p-t-27">
                             Register Hostel
 						</span>
+						<p>${message}</p>
 					<div class="login100-form">
                             <input type="hidden" id="user_role" name="user_role" value="student">
                       </div>
                       <div class="login100-form">
                           <label for="staffId">Hostel</label>
-                          <select class="input100" id="hostel" name="hostel" required>
-                           <option>Nairobi</option>
+                          <select class="input100" id="hostel_select" name="hostel" required>
+                          <option value="">Select Hostel</option>
+                          <option>Nairobi</option>
 	                        <option>Mombasa</option>
 	                        <option>Eldoret</option>
 	                        <option>Victoria</option>
@@ -55,59 +59,72 @@
                         </div>
                         <div class="login100-form">
                           <label for="lname">Block</label>
-                          <select class="input100" id="block_select" name="block">
-                                <option value="1" hostel="Nairobi">1</option>
-                                <option value="2" hostel="Nairobi">2</option>
-                                <option value="3" hostel="Nairobi">3</option>
-                                <option value="4" hostel="Nairobi">4</option>
-                                <option value="5" hostel="Nairobi">5</option>
+                          <select class="input100" id="block_select" name="block" required>
+                          		<option value="0" hostel="Nairobi" class="hide">Select Block</option>
+                                <option value="1" hostel="Nairobi" class="hide">1</option>
+                                <option value="2" hostel="Nairobi" class="hide">2</option>
+                                <option value="3" hostel="Nairobi"class="hide">3</option>
+                                <option value="4" hostel="Nairobi" class="hide">4</option>
+                                <option value="5" hostel="Nairobi" class="hide">5</option>
                                 
+                                <option value="0" hostel="Thornton" class="hide">Select Block</option>
+                                <option value="Thornton" hostel="Thornton" class="hide">Thornton</option>
+                                
+                                <option value="0" hostel="Victoria" class="hide">Select Block</option>
+                                <option value="Victoria" hostel="Victoria" class="hide">Victoria</option>
+                                
+                                <option value="0" hostel="Elementaita" class="hide">Select Block</option>
+                                <option value="Elementaita" hostel="Elementaita" class="hide">Elementaita</option>
+                                
+                                <option value="0" hostel="Mombasa" class="hide">Select Block</option>
                                 <option value="1" hostel="Mombasa" class="hide">1</option>
                                 <option value="2" hostel="Mombasa" class="hide">2</option>
                                 <option value="3" hostel="Mombasa" class="hide">3 </option>
                                 <option value="4" hostel="Mombasa" class="hide">4</option>
                                 <option value="5" hostel="Mombasa" class="hide">5 </option>
                                 
+                                <option value="0" hostel="Eldoret" class="hide">Select Block</option>
                                 <option value="1" hostel="Eldoret" class="hide">1</option>
                                 <option value="2" hostel="Eldoret" class="hide">2</option>
                                 <option value="3" hostel="Eldoret" class="hide">3 </option>
                                 <option value="4" hostel="Eldoret" class="hide">4</option>
                                 <option value="5" hostel="Eldoret" class="hide">5 </option>
                                 
-                                
+                                <option value="0" hostel="Maringo" class="hide">Select Block</option>
                                 <option value="1" hostel="Maringo" class="hide">1</option>
                                 <option value="2" hostel="Maringo" class="hide">2</option>
                                 <option value="3" hostel="Maringo" class="hide">3 </option>
                                 <option value="4" hostel="Maringo" class="hide">4 </option>
                                 <option value="5" hostel="Maringo" class="hide">5</option>
                                 
-                         		<option value="Thornton" hostel="Thornton" class="hide">Thornton</option>
-                                
-                                <option value="Victoria" hostel="Victoria" class="hide">Victoria</option>
-                                
-                                <option value="Elementaita" hostel="Elementaita" class="hide">Elementaita</option>
+                         		
                                 </select>
                         </div>
                        <div class="login100-form ">
                     <label for="roomNumber">Room Number:</label>
-                     <select class="input100" id="room_select" name="roomNumber">
-                                <option value="1" hostel="Nairobi">1</option>
-                                <option value="2" hostel="Nairobi">2</option>
-                                <option value="3" hostel="Nairobi">3</option>
+                     <select class="input100" id="room_select" name="room">
+                                <option value="0" hostel="Nairobi" class="hide">Select Room</option>
+                                <option value="1" hostel="Nairobi" class="hide">1</option>
+                                <option value="2" hostel="Nairobi" class="hide">2</option>
+                                <option value="3" hostel="Nairobi"class="hide">3</option>
                                 
+                                <option value="0" hostel="Mombasa" class="hide">Select Room</option>
                                 <option value="1" hostel="Mombasa" class="hide">1</option>
                                 <option value="2" hostel="Mombasa" class="hide">2</option>
                                 <option value="3" hostel="Mombasa" class="hide">3 </option>
                                 
+                                <option value="0" hostel="Eldoret" class="hide">Select Room</option>
                                 <option value="1" hostel="Eldoret" class="hide">1</option>
                                 <option value="2" hostel="Eldoret" class="hide">2</option>
                                 <option value="3" hostel="Eldoret" class="hide">3 </option>
                                 
+                                <option value="0" hostel="Maringo" class="hide">Select Room</option>
                                 <option value="1" hostel="Maringo" class="hide">1</option>
                                 <option value="2" hostel="Maringo" class="hide">2</option>
                                 <option value="3" hostel="Maringo" class="hide">3 </option>
                                 <option value="4" hostel="Maringo" class="hide">4 </option>
                                 
+                                <option value="0" hostel="Victoria" class="hide">Select Room</option>
                                 <option value="1" hostel="Victoria" class="hide">1</option>
                                 <option value="2" hostel="Victoria" class="hide">2</option>
                                 <option value="3" hostel="Victoria" class="hide">3</option>
@@ -119,6 +136,7 @@
                                 <option value="9" hostel="Victoria" class="hide">9</option>
                                 <option value="10" hostel="Victoria" class="hide">10</option>
                                 
+                                <option value="0" hostel="Elementaita" class="hide">Select Room</option>
                                 <option value="1" hostel="Elementaita" class="hide">1</option>
                                 <option value="2" hostel="Elementaita" class="hide">2</option>
                                 <option value="3" hostel="Elementaita" class="hide">3</option>
@@ -130,6 +148,7 @@
                                 <option value="9" hostel="Elementaita" class="hide">9</option>
                                 <option value="10" hostel="Elementaita" class="hide">10</option>
                                 
+                                <option value="0" hostel="Thornton" class="hide">Select Room</option>
                                 <option value="1" hostel="Thornton" class="hide">1</option>
                                 <option value="2" hostel="Thornton" class="hide">2</option>
                                 <option value="3" hostel="Thornton" class="hide">3</option>
@@ -142,10 +161,9 @@
                                 <option value="10" hostel="Thornton" class="hide">10</option>
                                 </select>
                      
-                        <div class="login100-form">
-                          <label for="email">Bed No</label>
-                          <input type="email" class="input100" id="email" name="user_email" placeholder="xyz@abc.com" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" title="Use the correct format -----@-----.---" required>
-                        </div>
+                        
+                          <input type="hidden" class="input100" id="bedNo" name="bedNo" readonly>
+                        
                         <br>
                          
                         <center>
@@ -153,16 +171,34 @@
                         </center>
                     </form>
                     <br>
-                        <center>
-                            <a href="adminUI.jsp">
-                                <button type="submit" class="login100-form-btn">Cancel</button>
-                            </a>
-                        </center>
+                       <center>
+                          <button class="login100-form-btn">    <a href="adminUI.jsp">Cancel</a></button>
+                        </center> 
                 </div>
         
             </div>
         </div>
 <script>
+function validateForm()                                    
+{ 
+	if (document.getElementById('block_select').value =="0")                      
+    { 
+        alert("Select block please"); 
+        block_select.focus(); 
+        return false; 
+    } 
+    
+	if (document.getElementById('room_select').value =="0")                      
+    { 
+        alert("Select room please"); 
+        room_select.focus(); 
+        return false; 
+    } 
+   
+
+
+    return true; 
+}
 document.getElementById('hostel_select').addEventListener("change", function() {
 	  var val = this.value;
 	  var options = document.getElementById('block_select').options;
@@ -199,6 +235,72 @@ document.getElementById('hostel_select').addEventListener("change", function() {
 	  document.getElementById('room_select').value = new_val;  
 
 	});
+	
+	document.getElementById('room_select').addEventListener("change", function() {
+		  var room=document.getElementById('room_select').value;
+		  var block=document.getElementById('block_select').value;
+		  var hostel=document.getElementById('hostel_select').value;
+		    
+		if(room==="1" && hostel==="Maringo"){
+			 document.getElementById('bedNo').value = 1;
+		}
+		if(room==="2" && hostel==="Maringo"){
+			 document.getElementById('bedNo').value = 2;
+		}
+		
+		if(room==="3" && hostel==="Maringo"){
+			 document.getElementById('bedNo').value = 4;
+		}
+		if((room==="4") && hostel==="Maringo"){
+			 document.getElementById('bedNo').value = 4;
+		}
+		
+		if(room==="1" && hostel==="Nairobi"){
+			 document.getElementById('bedNo').value = 1;
+		}
+		if(room==="2" && hostel==="Nairobi"){
+			 document.getElementById('bedNo').value = 4;
+		}
+		
+		if(room==="3" && hostel==="Nairobi"){
+			 document.getElementById('bedNo').value = 4;
+		}
+		
+		
+		if(room==="1" && hostel==="Eldoret"){
+			 document.getElementById('bedNo').value = 1;
+		}
+		if(room==="2" && hostel==="Eldoret"){
+			 document.getElementById('bedNo').value = 4;
+		}
+		
+		if(room==="3" && hostel==="Eldoret"){
+			 document.getElementById('bedNo').value = 4;
+		}
+		
+		if(room==="1" && hostel==="Mombasa"){
+			 document.getElementById('bedNo').value = 1;
+		}
+		if(room==="2" && hostel==="Mombasa"){
+			 document.getElementById('bedNo').value = 4;
+		}
+		
+		if(room==="3" && hostel==="Mombasa"){
+			 document.getElementById('bedNo').value = 4;
+		}
+		
+		if(hostel==="Elementaita"){
+			 document.getElementById('bedNo').value = 6;
+		}
+		
+		if(hostel==="Thornton"){
+			 document.getElementById('bedNo').value = 2;
+		}
+		
+		if(hostel==="Victoria"){
+			 document.getElementById('bedNo').value = 6;
+		}
+		});
     </script>      
 	
   </body>

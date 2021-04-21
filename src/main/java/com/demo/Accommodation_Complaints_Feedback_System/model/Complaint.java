@@ -22,7 +22,7 @@ public class Complaint {
 	@NotBlank 
 	private String complaintCategory;
 	
-	@NotBlank 
+	
 	private String complaintComment;
 	
 	

@@ -151,7 +151,7 @@
        <li class="nav-item ">
         <a class="nav-link" href="filteredReports.jsp">
           <i class="fas fa-folder"></i>
-          <span>Generate Filtered Reports</span></a>
+          <span>Generate filtered reports</span></a>
       </li>
 <hr class="sidebar-divider">
         </ul> 
@@ -167,7 +167,7 @@
             <div class="container">
 
       <!-- About Section Heading -->
-      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Assigned Complaints</h2>
+      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Done Complaints</h2>
 
       <!-- Icon Divider -->
       <div class="divider-custom ">
@@ -210,9 +210,8 @@
 				<td>Complaint Room Number</td>
 				<td>Complaint Category</td>
 				<td>Complaint Content</td>
-				<td>Complaint Assigned By: (ID)</td>
-				<td>Complaint Assigned To: (ID)</td>
-				
+				<td>Complaint Done By: (ID)</td>
+				<td>Complaint comment</td>
 
                   </tr>
                   
@@ -222,7 +221,7 @@
                 try{
                 	connection = DriverManager.getConnection(connectionUrl, userId, password);
         			statement=connection.createStatement();
-        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'assigned' ORDER BY complaint_id DESC";
+        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'done' ORDER BY complaint_id DESC";
 
         			resultSet = statement.executeQuery(sql);
         			while(resultSet.next()){
@@ -234,10 +233,33 @@
         		    	<td><%out.println(resultSet.getString("complaint_room_number")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_category")); %></td>
         		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_assigned_by")); %></td>
-        		    	<td><%out.println(resultSet.getString("complaint_assigned_to")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_done_by")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_comment")); %></td>
         			</tr>
- 
+    				<%
+    			    }
+
+    			    } catch (Exception e) {
+    			    e.printStackTrace();
+    			    }
+                try{
+                	connection = DriverManager.getConnection(connectionUrl, userId, password);
+        			statement=connection.createStatement();
+        			String sql ="SELECT * FROM complaints WHERE complaint_status = 'incomplete' ORDER BY complaint_id DESC";
+
+        			resultSet = statement.executeQuery(sql);
+        			while(resultSet.next()){
+        			%>
+        			<tr>
+        				<td><%out.println(resultSet.getString("complaint_author_id")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_hostel")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_block")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_room_number")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_category")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_content")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_done_by")); %></td>
+        		    	<td><%out.println(resultSet.getString("complaint_comment")); %></td>
+        			</tr>
     				<%
     			    }
 
@@ -246,14 +268,14 @@
     			    }
 			%>
 			<tr>
-			<form action="/admin/ComplaintsReport" method="post">
-     <input type="hidden" name="complaintStatus" value="assigned">
+			 <form action="/admin/ComplaintsReport" method="post">
+     <input type="hidden" name="complaintStatus" value="done">
                 <button type="submit" class="btn btn-success btn-block">Print</button>
      			</form>
-			 </tr>
+			</tr>
                 </tbody>
                 </table>
-     
+    
             </div>
     </section>
           
